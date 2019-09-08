@@ -52,14 +52,27 @@
   <h2>Difficult: {{ difficulty_average }}</h2>
   <h2>Instructor: {{ instructor_average }}</h2>
 
+  <div class="ui horizontal divider">
+    <h4 class="header">
+      <i class="tag icon"></i>
+      Instructors
+    </h4>
+  </div>
+  {% for instructor in course.instructors %}
+    <button class="ui small button">
+    {{ instructor }}
+    </button>
+  {% endfor %}
+
+  <div class="class ui horizontal divider">
+    <h4 class="header">
+      <i class="comment icon"></i>
+      Reviews
+    </h4>
+  </div>
+
   {% if reviews %}
     {% for review in reviews %}
-      <p>Usefulness: {{ review.usefulness_rating }}</p>
-      <p>Difficulty: {{ review.difficulty_rating }}</p>
-      <p>Instructor: {{ review.instructor_rating }}</p>
-      <p>Comment: {{ review.comment }}</p>
-      <p>Instructor: {{ review.instructor }}</p>
-      <p>Session: {{ review.taken_season }} {{ review.taken_year }}</p>
 
       {% if review.anonymous == True %}
       <p>anonymous</p>
@@ -68,6 +81,13 @@
       <p>{{ review.author.social_auth.all.0.extra_data.name }}</p>
       <img src="{{ review.author.social_auth.all.0.extra_data.picture.data.url }}" alt="">
       {% endif %}
+      <p>Usefulness: {{ review.usefulness_rating }}</p>
+      <p>Difficulty: {{ review.difficulty_rating }}</p>
+      <p>Instructor: {{ review.instructor_rating }}</p>
+      <p>Comment: {{ review.comment }}</p>
+      <p>Instructor: {{ review.instructor }}</p>
+      <p>Session: {{ review.taken_season }} {{ review.taken_year }}</p>
+      <p>{{ review.created_at|date:"N jS, Y"  }}</p>
 
     {% endfor %}
   {% else %}

@@ -1,0 +1,8 @@
+/* should only apply on desktop sized screens */
+#category-card {
+  transition: all .2s ease-in-out;
+}
+#category-card:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
