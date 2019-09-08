@@ -10,7 +10,7 @@
   <h3>{{ course.title }}</h3>
   <p>{{ course.description }}</p>
 
-  {% if syllabus %}
+  {% if syllabus != None %}
     <a href="{{ syllabus.syllabus }}">Syllabus</a>
   {% else %}
     <button class="ui button" id="upload-syllabus">Upload Course Outline</button>
@@ -20,12 +20,18 @@
       <div class="header">
         {{ course.code }} Syllabus
       </div>
+
+      {% if user.is_authenticated %}
       <form method="POST" enctype="multipart/form-data" id="syllabus-form-ajax" url="{% url 'syllabus' id=course.id %}">
         {% csrf_token %}
 
         <input type="file" name="syllabus" required="" id="id_syllabus">
         <button type="submit">Save</button>
       </form>
+      {% else %}
+      <a href="{% url 'login' %}?next={{request.get_full_path}}" class="item">Login</a>
+      {% endif %}
+
       <div class="actions">
         <div class="ui black deny button">
           Nope

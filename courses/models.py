@@ -15,7 +15,7 @@ class Course(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 class Syllabus(models.Model):
-    course_code = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
     syllabus = models.FileField(upload_to='syllabus/')
     updated_at = models.DateTimeField(auto_now=True)
     uploader = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)

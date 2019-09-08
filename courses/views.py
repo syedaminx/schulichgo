@@ -25,6 +25,11 @@ def course(request, category, number):
     course_object = Course.objects.get(category=category, number=number)
     reviews = Review.objects.all().filter(course_code_id=course_object.pk)
 
+    try:
+        syllabus = Syllabus.objects.get(course_id=course_object.pk)
+    except Syllabus.DoesNotExist:
+        syllabus = None
+
     usefulness_average = list(reviews.aggregate(Avg('usefulness_rating')).values())[0]
     difficulty_average = list(reviews.aggregate(Avg('difficulty_rating')).values())[0]
     instructor_average = list(reviews.aggregate(Avg('instructor_rating')).values())[0]
