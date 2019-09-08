@@ -18,6 +18,7 @@ $(document).ready(function() {
         processData: false,
         contentType: false,
         success: function(data) {
+          location.reload();
           alert('success');
         }
       });
@@ -25,7 +26,7 @@ $(document).ready(function() {
     }
 
     $(function() {
-      $('#syllabus-form-ajax').submit(upload);
+      $('#syllabus-submit-ajax').click(upload);
     });
 
   });

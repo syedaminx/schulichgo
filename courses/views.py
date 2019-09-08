@@ -54,22 +54,18 @@ def syllabus(request, id):
     course_id = Course.objects.get(pk=id)
 
     if request.method == "POST" and request.is_ajax():
-        print("ajax request")
         form = SyllabusForm(request.POST, files=request.FILES)
         if form.is_valid():
             syllabus = form.save(commit=False)
             syllabus.uploader = request.user
-            syllabus.course_code = course_id
+            syllabus.course = course_id
             syllabus.save()
-            print('valid form')
+            message = {'success': 'Syllabus has been successfully uploaded'}
     else:
         form = SyllabusForm()
+        message = {'error': 'There was an error trying to upload the syllabus, please try again'}
 
-    context = {
-        'form': form
-    }
-
-    return JsonResponse({'message': 'form  has been submitted'})
+    return JsonResponse(message)
 
 @login_required
 def review(request, category, number):
