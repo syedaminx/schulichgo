@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}- {{ categories.category_title }}{% endblock title %}
+
+{% block content %}
+
+<div class="ui container">
+  <h1>{{ categories.category }}</h1>
+  <h2>{{ categories.category_title }}</h2>
+  <table class="ui selectable celled table">
+    <thead>
+      <tr>
+        <th>Course Code</th>
+        <th>Title</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for course in courses %}
+      <tr class="selectable" onclick="window.location.href='{% url 'course' category=course.category number=course.number %}'">
+        <td>{{ course.code }}</td>
+        <td>{{ course.title }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock content %}

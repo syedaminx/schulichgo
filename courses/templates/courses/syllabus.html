@@ -1,0 +1,6 @@
+<form method="POST" enctype="multipart/form-data" id="syllabus-form-ajax">
+  {% csrf_token %}
+
+  {{ form.as_p }}
+  <button type="submit">Save</button>
+</form>

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}- {{ course.title }}{% endblock title %}
+
+{% block content %}
+
+<div class="ui container">
+  <h1>{{ course.code }}</h1>
+  <h3>{{ course.title }}</h3>
+  <p>{{ course.description }}</p>
+
+  {% if syllabus %}
+    <a href="{{ syllabus.syllabus }}">Syllabus</a>
+  {% else %}
+    <button class="ui button" id="upload-syllabus">Upload Course Outline</button>
+
+    <div class="ui modal" id="upload-modal">
+      <i class="close icon"></i>
+      <div class="header">
+        {{ course.code }} Syllabus
+      </div>
+      <form method="POST" enctype="multipart/form-data" id="syllabus-form-ajax" url="{% url 'syllabus' id=course.id %}">
+        {% csrf_token %}
+
+        <input type="file" name="syllabus" required="" id="id_syllabus">
+        <button type="submit">Save</button>
+      </form>
+      <div class="actions">
+        <div class="ui black deny button">
+          Nope
+        </div>
+        <div class="ui positive right labeled icon button">
+          Yep, that's me
+          <i class="checkmark icon"></i>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <h1>Overall: {{ overall_average }}</h1>
+  <h2>Usefulness: {{ usefulness_average }}</h2>
+  <h2>Difficult: {{ difficulty_average }}</h2>
+  <h2>Instructor: {{ instructor_average }}</h2>
+
+  {% if reviews %}
+    {% for review in reviews %}
+      <p>Usefulness: {{ review.usefulness_rating }}</p>
+      <p>Difficulty: {{ review.difficulty_rating }}</p>
+      <p>Instructor: {{ review.instructor_rating }}</p>
+      <p>Comment: {{ review.comment }}</p>
+      <p>Instructor: {{ review.instructor }}</p>
+      <p>Session: {{ review.taken_season }} {{ review.taken_year }}</p>
+
+      {% if review.anonymous == True %}
+      <p>anonymous</p>
+      <img src="https://media.gettyimages.com/photos/portrait-of-an-english-bulldog-picture-id164930509?s=612x612" alt="" height=100 width=100>
+      {% else %}
+      <p>{{ review.author.social_auth.all.0.extra_data.name }}</p>
+      <img src="{{ review.author.social_auth.all.0.extra_data.picture.data.url }}" alt="">
+      {% endif %}
+
+    {% endfor %}
+  {% else %}
+    <p>Unforunately, there are no reviews for this course yet</p>
+  {% endif %}
+
+  <a href="{% url 'review' category=course.category number=course.number %}"><button>Write a Review</button></a>
+</div>
+
+  <script type="text/javascript" src="{% static 'js/course.js' %}"></script>
+
+{% endblock content %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<h1>hi there, {{ user.username }}</h1>
+{% else %}
+<h2>no one is signed in</h2>
+{% endif %}
+
+<div class="ui container">
+  <div class="ui four stackable cards">
+    {% for category in categories %}
+      <div class="card">
+        <div class="image">
+          <img src="{% static 'img/categories/'|add:category.category|add:'.jpg' %}" alt="" onerror="this.onerror=null;this.src='{% static 'img/categories/General'|add:'.jpg' %}'">
+        </div>
+        <div class="content">
+          <a href="{% url 'category' category=category.category %}" class="header">{{ category.category }}</a>
+            <div class="meta">{{ category.category_title|truncatechars:30 }}</div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}
