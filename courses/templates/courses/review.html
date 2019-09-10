@@ -2,14 +2,108 @@
 
 {% block content %}
 
-<h1>{{ course.code }}</h1>
-<h3>{{ course.title }}</h3>
+<div class="ui container">
 
-<form method="POST" class="post-form">
-  {% csrf_token %}
+  <h1>{{ course.code }}</h1>
+  <h3>{{ course.title }}</h3>
 
-  {{ form.as_p }}
-  <button type="submit">Save</button>
-</form>
+  <form method="POST" class="post-form">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+  </form>
+
+  <form method="POST" class="ui form">
+    {% csrf_token %}
+
+    <div class="field">
+      <label for="id_usefulness_rating">Usefulness</label>
+      <div class="ui star rating" name="usefulness_rating" required id="id_usefulness_rating"></div>
+    </div>
+
+    <div class="field">
+      <label for="id_difficulty_rating">Difficulty</label>
+      <div class="ui star rating" name="difficulty_rating" required id="id_difficulty_rating"></div>
+    </div>
+
+    <div class="field">
+      <label for="id_instructor_rating">Instructor</label>
+      <div class="ui star rating" name="instructor_rating" required id="id_instructor_rating"></div>
+    </div>
+
+    <div class="field">
+      <label>Session</label>
+      <div class="fields">
+
+        <!-- season  -->
+        <div class="field">
+          <div class="ui selection dropdown">
+            <input type="hidden" name= "taken_season">
+            <i class="dropdown icon"></i>
+            <div class="default text">Season</div>
+            <div class="menu">
+              {% for value, text in form.taken_season.field.choices %}
+                <div class="item" date-value="{{ value }}">{{ text }}</div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- year -->
+        <div class="field">
+          <div class="ui selection dropdown">
+            <input type="hidden" name= "taken_season">
+            <i class="dropdown icon"></i>
+            <div class="default text">Year</div>
+            <div class="menu">
+              {% for value, text in form.taken_year.field.choices %}
+                <div class="item" date-value="{{ value }}">{{ text }}</div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- instructor -->
+        <label for="id_instructor_rating">Instructor</label>
+        <div class="field">
+          <div class="ui selection dropdown">
+            <input type="hidden" name= "taken_season">
+            <i class="dropdown icon"></i>
+            <div class="default text">Instructor</div>
+            <div class="menu">
+              {% for value, text in form.instructor.field.choices %}
+                <div class="item" date-value="{{ value }}">{{ text }}</div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+    </div>
+
+    <div class="field">
+      <label for="id_comment">Comment</label>
+      <textarea name="comment" required id="id_comment" cols="30" rows="10"></textarea>
+    </div>
+
+  </form>
+
+
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".rating").rating({
+      initialRating: 0,
+      maxRating:5
+    });
+
+    $('.ui.dropdown').dropdown();
+  });
+</script>
+
+
+
 
 {% endblock content %}

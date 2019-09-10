@@ -29,13 +29,15 @@ class Review(models.Model):
     year_choices = range(2000, current_year + 1)
     year_choices = tuple(zip(year_choices, year_choices)) #turning into a tuple because django expects actual value and human readable form, which is same in this case
 
+    season_choices = (('Fall', 'Fall'), ('Winter', 'Winter'), ('Summer', 'Summer'))
+
     course_code = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='course_code')
     usefulness_rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     difficulty_rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     instructor_rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     comment = models.TextField()
     instructor = models.CharField(max_length=200)
-    taken_season = models.CharField(max_length=200, choices=(('Fall', 'Fall'), ('Winter', 'Winter'), ('Summer', 'Summer')))
+    taken_season = models.CharField(max_length=200, choices=(season_choices))
     taken_year = models.IntegerField(choices=(year_choices))
     created_at = models.DateTimeField(auto_now=True)
     anonymous = models.BooleanField()
