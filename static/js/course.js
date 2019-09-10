@@ -1,5 +1,6 @@
 $(document).ready(function() {
 
+  // syllabus modal
   $('#upload-syllabus').click(function() {
     $('#upload-modal').modal('show');
 

@@ -4,6 +4,8 @@ from .models import Category, Course, Review, Syllabus
 from .forms import ReviewForm, SyllabusForm
 from django.db.models import Avg
 from django.contrib.auth.decorators import login_required
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 
 def home(request):
     categories = Category.objects.all()
@@ -23,21 +25,25 @@ def category(request, category):
 
 def course(request, category, number):
     course_object = Course.objects.get(category=category, number=number)
-    reviews = Review.objects.all().filter(course_code_id=course_object.pk)
+    reviews = Review.objects.all().filter(course_code_id=course_object.pk).order_by('-created_at').values('usefulness_rating', 'difficulty_rating', 'instructor_rating', 'comment', 'instructor', 'taken_season', 'taken_year', 'created_at', 'anonymous', 'author')
 
     try:
         syllabus = Syllabus.objects.get(course_id=course_object.pk)
     except Syllabus.DoesNotExist:
         syllabus = None
 
-    usefulness_average = list(reviews.aggregate(Avg('usefulness_rating')).values())[0]
-    difficulty_average = list(reviews.aggregate(Avg('difficulty_rating')).values())[0]
-    instructor_average = list(reviews.aggregate(Avg('instructor_rating')).values())[0]
-
     if reviews:
-        overall_average = round((usefulness_average + difficulty_average + instructor_average) / 3, 2)
+        usefulness_average = round(list(reviews.aggregate(Avg('usefulness_rating')).values())[0], 2)
+        difficulty_average = round(list(reviews.aggregate(Avg('difficulty_rating')).values())[0], 2)
+        instructor_average = round(list(reviews.aggregate(Avg('instructor_rating')).values())[0], 2)
+        overall_average = round((usefulness_average + difficulty_average + instructor_average) / 3, 1)
     else:
         overall_average = 0
+        usefulness_average = 0
+        difficulty_average = 0
+        instructor_average = 0
+
+    reviews_json = json.dumps(list(reviews), cls=DjangoJSONEncoder)
 
     context = {
         'course': course_object,
@@ -45,9 +51,10 @@ def course(request, category, number):
         'difficulty_average': difficulty_average,
         'instructor_average': instructor_average,
         'overall_average': overall_average,
-        'reviews': reviews,
+        'reviews': reviews_json,
         'syllabus': syllabus
     }
+
     return render(request, 'courses/course.html', context)
 
 def syllabus(request, id):

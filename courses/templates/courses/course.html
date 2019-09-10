@@ -71,15 +71,47 @@
     </h4>
   </div>
 
-  {% if reviews %}
+  <button class="test-button">Test</button>
+
+  <script>
+    var reviews = '{{ reviews|safe }}'
+    var reviews_json = JSON.parse(reviews)
+
+    console.log(reviews_json)
+
+    // conditional formatting, when the button is clicked, if the review was for Ziyao San, it will be displayed
+
+    $(document).ready(function(){
+      $(".test-button").click(function(){
+        for (x in reviews_json) {
+        	if (reviews_json[x].instructor == "Ziyao San") {
+            if (reviews_json[x].anonymous = true) {
+              $(".test-button").after(document.createElement("p").innerHTML = "Anonymous");
+            } else {
+              $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].author);
+            }
+            $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].usefulness_rating);
+            $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].difficulty_rating);
+            $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].instructor_rating);
+            $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].comment);
+            $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].instructor);
+            $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].taken_year);
+            $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].created_at);
+            }
+        }
+      });
+    });
+  </script>
+
+  <!-- {% if reviews %}
     {% for review in reviews %}
 
       {% if review.anonymous == True %}
       <p>anonymous</p>
-      <img src="https://media.gettyimages.com/photos/portrait-of-an-english-bulldog-picture-id164930509?s=612x612" alt="" height=100 width=100>
+      <img class="ui small circular image" src="https://media.gettyimages.com/photos/portrait-of-an-english-bulldog-picture-id164930509?s=612x612" alt="">
       {% else %}
       <p>{{ review.author.social_auth.all.0.extra_data.name }}</p>
-      <img src="{{ review.author.social_auth.all.0.extra_data.picture.data.url }}" alt="">
+      <img class="ui small circular image" src="{{ review.author.social_auth.all.0.extra_data.picture.data.url }}" alt="">
       {% endif %}
       <p>Usefulness: {{ review.usefulness_rating }}</p>
       <p>Difficulty: {{ review.difficulty_rating }}</p>
@@ -92,7 +124,7 @@
     {% endfor %}
   {% else %}
     <p>Unforunately, there are no reviews for this course yet</p>
-  {% endif %}
+  {% endif %} -->
 
   <a href="{% url 'review' category=course.category number=course.number %}"><button>Write a Review</button></a>
 </div>
