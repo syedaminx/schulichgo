@@ -8,7 +8,7 @@ class ReviewForm(forms.ModelForm):
         ('EXAMPLE', 'example'),
     )
 
-    instructor = forms.ChoiceField(choices=choices)
+    instructor = forms.CharField(widget=forms.Select(choices=choices))
 
     def __init__(self, *args, **kwargs):
         instructors = kwargs.pop('instructors')

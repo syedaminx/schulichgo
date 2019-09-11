@@ -79,9 +79,25 @@ def review(request, category, number):
     course_object=Course.objects.get(category=category, number=number)
 
     if request.method == "POST":
+        data = request.POST
+
+        if data['instructor'] == 'Other':
+            instructor_val = data['other_instructor']
+        else:
+            instructor_val = data['instructor']
+
         form = ReviewForm(request.POST, instructors=course_object.instructors)
         if form.is_valid():
             review = form.save(commit=False)
+
+            if data['instructor'] == 'Other':
+                instructor_val = data['other_instructor']
+                course_object.instructors.append(instructor_val)
+                course_object.save()
+            else:
+                instructor_val = data['instructor']
+
+            review.instructor = instructor_val
             review.course_code = course_object
             review.author = request.user
             review.save()

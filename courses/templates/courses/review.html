@@ -62,9 +62,9 @@
       </div>
 
       <!-- conditional instructor input field -->
-      <div class="field" style="display:none;" id="other-instructor">
+      <div class="field" style="display:none;"id="other_instructor_div">
         <label>Instructor Name</label>
-        <input type="text" placeholder="Who was your instructor?">
+        <input type="text" placeholder="Who was your instructor?" id="other_instructor_text">
       </div>
 
       <h4 class="ui dividing header">Review</h4>
@@ -114,14 +114,13 @@
 
     $('.ui.dropdown').dropdown();
 
-
     $('.ui.checkbox').checkbox();
 
     $('#id_instructor').change(function() {
       if ($('#id_instructor').dropdown('get text') == "Other") {
-        document.getElementById("other-instructor").style.display = "block";
+        document.getElementById("other_instructor_div").style.display = "block";
       } else {
-        document.getElementById("other-instructor").style.display = "none";
+        document.getElementById("other_instructor_div").style.display = "none";
       }
     });
 
@@ -131,10 +130,19 @@
     });
 
     function submit_review() {
+
       if ($('#id_anonymous').checkbox('is checked') == true) {
         anonymous = true
       } else {
         anonymous = false
+      }
+
+      if ($('#id_instructor').dropdown('get text') == "Other") {
+        other_instructor = $('#other_instructor_text').val();
+        console.log(other_instructor)
+      } else {
+        other_instructor = ""
+        console.log(other_instructor)
       }
 
       $.ajax({
@@ -144,6 +152,7 @@
           taken_season: $('#id_taken_season').dropdown('get text'),
           taken_year: $('#id_taken_year').dropdown('get text'),
           instructor: $('#id_instructor').dropdown('get text'),
+          other_instructor: other_instructor,
           usefulness_rating: $('#id_usefulness_rating').rating('get rating'),
           difficulty_rating: $('#id_difficulty_rating').rating('get rating'),
           instructor_rating: $('#id_instructor_rating').rating('get rating'),
