@@ -33,9 +33,9 @@ def course(request, category, number):
         syllabus = None
 
     if reviews:
-        usefulness_average = round(list(reviews.aggregate(Avg('usefulness_rating')).values())[0], 2)
-        difficulty_average = round(list(reviews.aggregate(Avg('difficulty_rating')).values())[0], 2)
-        instructor_average = round(list(reviews.aggregate(Avg('instructor_rating')).values())[0], 2)
+        usefulness_average = round(list(reviews.aggregate(Avg('usefulness_rating')).values())[0], 1)
+        difficulty_average = round(list(reviews.aggregate(Avg('difficulty_rating')).values())[0], 1)
+        instructor_average = round(list(reviews.aggregate(Avg('instructor_rating')).values())[0], 1)
         overall_average = round((usefulness_average + difficulty_average + instructor_average) / 3, 1)
     else:
         overall_average = 0
@@ -85,7 +85,8 @@ def review(request, category, number):
             review.course_code = course_object
             review.author = request.user
             review.save()
-            return HttpResponse("the review has been submitted")
+            message = {'success': "sucess"}
+            return JsonResponse(message)
     else:
         form = ReviewForm(instructors=course_object.instructors)
 

@@ -61,6 +61,12 @@
         </div>
       </div>
 
+      <!-- conditional instructor input field -->
+      <div class="field" style="display:none;" id="other-instructor">
+        <label>Instructor Name</label>
+        <input type="text" placeholder="Who was your instructor?">
+      </div>
+
       <h4 class="ui dividing header">Review</h4>
 
       <div class="three fields">
@@ -100,7 +106,8 @@
 
 <script type="text/javascript">
   $(document).ready(function() {
-    $(".rating").rating({
+
+    $('.rating').rating({
       initialRating: 0,
       maxRating: 5
     });
@@ -110,29 +117,25 @@
 
     $('.ui.checkbox').checkbox();
 
-    $('#post-form').on('submit', function(event){
-      event.preventDefault();
-      console.log("form submitted")
-      create_review();
+    $('#id_instructor').change(function() {
+      if ($('#id_instructor').dropdown('get text') == "Other") {
+        document.getElementById("other-instructor").style.display = "block";
+      } else {
+        document.getElementById("other-instructor").style.display = "none";
+      }
     });
 
-    function create_review() {
-      console.log("create_review is working")
-      console.log($('#id_taken_season').dropdown('get text'))
-      console.log($('#id_taken_year').dropdown('get text'))
-      console.log($('#id_instructor').dropdown('get text'))
-      console.log($('#id_usefulness_rating').rating('get rating'))
-      console.log($('#id_difficulty_rating').rating('get rating'))
-      console.log($('#id_instructor_rating').rating('get rating'))
-      console.log($('#id_comment').val())
+    $('#post-form').on('submit', function(event){
+      event.preventDefault();
+      submit_review();
+    });
 
+    function submit_review() {
       if ($('#id_anonymous').checkbox('is checked') == true) {
         anonymous = true
       } else {
         anonymous = false
       }
-
-      console.log(anonymous)
 
       $.ajax({
         url: "{% url 'review' category=course.category number=course.number %}",
@@ -149,6 +152,7 @@
           csrfmiddlewaretoken : "{{csrf_token}}"
         },
         success: function(redirect) {
+          window.location.href="{% url 'course' category=course.category number=course.number %}"
         },
         error: {
           alert: 'there has been an error'
