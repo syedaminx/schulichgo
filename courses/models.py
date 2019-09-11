@@ -26,7 +26,7 @@ class Category(models.Model):
 
 class Review(models.Model):
     current_year = int(datetime.datetime.now().year) #to enable user to pick up to the current year
-    year_choices = range(2000, current_year + 1)
+    year_choices = range(current_year, 2000-1, -1)
     year_choices = tuple(zip(year_choices, year_choices)) #turning into a tuple because django expects actual value and human readable form, which is same in this case
 
     season_choices = (('Fall', 'Fall'), ('Winter', 'Winter'), ('Summer', 'Summer'))
@@ -37,8 +37,8 @@ class Review(models.Model):
     instructor_rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     comment = models.TextField()
     instructor = models.CharField(max_length=200)
-    taken_season = models.CharField(max_length=200, choices=(season_choices))
-    taken_year = models.IntegerField(choices=(year_choices))
+    taken_season = models.CharField(max_length=200, choices=(season_choices), blank=False, default='None')
+    taken_year = models.IntegerField(choices=(year_choices), blank=False, default='None')
     created_at = models.DateTimeField(auto_now=True)
     anonymous = models.BooleanField()
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)

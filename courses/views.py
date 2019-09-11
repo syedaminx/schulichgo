@@ -85,7 +85,7 @@ def review(request, category, number):
             review.course_code = course_object
             review.author = request.user
             review.save()
-            return HttpResponse("your review has been successfully saved")
+            return HttpResponse("the review has been submitted")
     else:
         form = ReviewForm(instructors=course_object.instructors)
 

@@ -7,44 +7,23 @@
   <h1>{{ course.code }}</h1>
   <h3>{{ course.title }}</h3>
 
-  <form method="POST" class="post-form">
-    {% csrf_token %}
+  <form method="POST" class="ui form" id="post-form">
 
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-  </form>
-
-  <form method="POST" class="ui form">
-    {% csrf_token %}
-
-    <div class="field">
-      <label for="id_usefulness_rating">Usefulness</label>
-      <div class="ui star rating" name="usefulness_rating" required id="id_usefulness_rating"></div>
-    </div>
-
-    <div class="field">
-      <label for="id_difficulty_rating">Difficulty</label>
-      <div class="ui star rating" name="difficulty_rating" required id="id_difficulty_rating"></div>
-    </div>
-
-    <div class="field">
-      <label for="id_instructor_rating">Instructor</label>
-      <div class="ui star rating" name="instructor_rating" required id="id_instructor_rating"></div>
-    </div>
+    <h4 class="ui dividing header">General Information</h4>
 
     <div class="field">
       <label>Session</label>
-      <div class="fields">
+      <div class="two fields">
 
         <!-- season  -->
         <div class="field">
-          <div class="ui selection dropdown">
-            <input type="hidden" name= "taken_season">
+          <div class="ui selection dropdown" id="id_taken_season">
+            <input type="hidden">
             <i class="dropdown icon"></i>
-            <div class="default text">Season</div>
+            <div class="default text">Term</div>
             <div class="menu">
               {% for value, text in form.taken_season.field.choices %}
-                <div class="item" date-value="{{ value }}">{{ text }}</div>
+              <div class="item" season-value="{{ value }}">{{ text }}</div>
               {% endfor %}
             </div>
           </div>
@@ -52,54 +31,131 @@
 
         <!-- year -->
         <div class="field">
-          <div class="ui selection dropdown">
-            <input type="hidden" name= "taken_season">
+          <div class="ui selection dropdown" id="id_taken_year">
+            <input type="hidden">
             <i class="dropdown icon"></i>
             <div class="default text">Year</div>
             <div class="menu">
               {% for value, text in form.taken_year.field.choices %}
-                <div class="item" date-value="{{ value }}">{{ text }}</div>
+              <div class="item" year-value="{{ value }}">{{ text }}</div>
               {% endfor %}
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-        <!-- instructor -->
+      <!-- instructor -->
+      <div class="field">
         <label for="id_instructor_rating">Instructor</label>
-        <div class="field">
-          <div class="ui selection dropdown">
-            <input type="hidden" name= "taken_season">
-            <i class="dropdown icon"></i>
-            <div class="default text">Instructor</div>
-            <div class="menu">
-              {% for value, text in form.instructor.field.choices %}
-                <div class="item" date-value="{{ value }}">{{ text }}</div>
-              {% endfor %}
-            </div>
+        <div class="ui selection dropdown" id="id_instructor">
+          <input type="hidden" name="taken_season">
+          <i class="dropdown icon"></i>
+          <div class="default text">Instructor</div>
+          <div class="menu">
+            {% for value, text in form.instructor.field.choices %}
+            <div class="item" instructor-value="{{ value }}">{{ text }}</div>
+            {% endfor %}
+            <div class="item"><b>Other</b></div>
           </div>
         </div>
+      </div>
 
+      <h4 class="ui dividing header">Review</h4>
+
+      <div class="three fields">
+        <div class="field">
+          <label>Usefulness</label>
+          <div class="ui huge star rating" name="usefulness_rating" required id="id_usefulness_rating"></div>
+        </div>
+
+        <div class="field">
+          <label>Difficulty</label>
+          <div class="ui huge star rating" name="difficulty_rating" required id="id_difficulty_rating"></div>
+        </div>
+
+        <div class="field">
+          <label>Instructor</label>
+          <div class="ui huge star rating" name="instructor_rating" required id="id_instructor_rating"></div>
+        </div>
+      </div>
+
+    <div class="field">
+      <label>Comment</label>
+      <textarea name="comment" required id="id_comment" cols="30" rows="10" style="font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;" placeholder="What did you like or dislike about this course and the professor?"></textarea>
     </div>
 
     <div class="field">
-      <label for="id_comment">Comment</label>
-      <textarea name="comment" required id="id_comment" cols="30" rows="10"></textarea>
+      <div class="ui toggle checkbox" id="id_anonymous">
+        <input type="checkbox" tabindex="0" class="hidden">
+        <label>Post Anonymously</label>
+      </div>
     </div>
 
+    <button class="ui button" type="submit">Post Review</button>
   </form>
 
 
 </div>
 
 <script type="text/javascript">
-  $(document).ready(function(){
+  $(document).ready(function() {
     $(".rating").rating({
       initialRating: 0,
-      maxRating:5
+      maxRating: 5
     });
 
     $('.ui.dropdown').dropdown();
+
+
+    $('.ui.checkbox').checkbox();
+
+    $('#post-form').on('submit', function(event){
+      event.preventDefault();
+      console.log("form submitted")
+      create_review();
+    });
+
+    function create_review() {
+      console.log("create_review is working")
+      console.log($('#id_taken_season').dropdown('get text'))
+      console.log($('#id_taken_year').dropdown('get text'))
+      console.log($('#id_instructor').dropdown('get text'))
+      console.log($('#id_usefulness_rating').rating('get rating'))
+      console.log($('#id_difficulty_rating').rating('get rating'))
+      console.log($('#id_instructor_rating').rating('get rating'))
+      console.log($('#id_comment').val())
+
+      if ($('#id_anonymous').checkbox('is checked') == true) {
+        anonymous = true
+      } else {
+        anonymous = false
+      }
+
+      console.log(anonymous)
+
+      $.ajax({
+        url: "{% url 'review' category=course.category number=course.number %}",
+        type: "POST",
+        data: {
+          taken_season: $('#id_taken_season').dropdown('get text'),
+          taken_year: $('#id_taken_year').dropdown('get text'),
+          instructor: $('#id_instructor').dropdown('get text'),
+          usefulness_rating: $('#id_usefulness_rating').rating('get rating'),
+          difficulty_rating: $('#id_difficulty_rating').rating('get rating'),
+          instructor_rating: $('#id_instructor_rating').rating('get rating'),
+          comment: $('#id_comment').val(),
+          anonymous: anonymous,
+          csrfmiddlewaretoken : "{{csrf_token}}"
+        },
+        success: function(redirect) {
+        },
+        error: {
+          alert: 'there has been an error'
+        }
+      });
+    };
+
   });
 </script>
 
