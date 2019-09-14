@@ -4,8 +4,9 @@ from .models import Category, Course, Review, Syllabus
 from .forms import ReviewForm, SyllabusForm
 from django.db.models import Avg
 from django.contrib.auth.decorators import login_required
-import json
+from django.core import serializers
 from django.core.serializers.json import DjangoJSONEncoder
+import json
 
 def home(request):
     categories = Category.objects.all()
@@ -16,7 +17,7 @@ def home(request):
 
 def category(request, category):
     category_object = Category.objects.get(category=category)
-    course_list = Course.objects.all().filter(category=category)
+    course_list = Course.objects.all().filter(category=category).order_by('number')
     context = {
         'categories': category_object,
         'courses': course_list
@@ -25,7 +26,7 @@ def category(request, category):
 
 def course(request, category, number):
     course_object = Course.objects.get(category=category, number=number)
-    reviews = Review.objects.all().filter(course_code_id=course_object.pk).order_by('-created_at').values('usefulness_rating', 'difficulty_rating', 'instructor_rating', 'comment', 'instructor', 'taken_season', 'taken_year', 'created_at', 'anonymous', 'author')
+    reviews = Review.objects.all().filter(course_code_id=course_object.pk).order_by('-created_at')
 
     try:
         syllabus = Syllabus.objects.get(course_id=course_object.pk)
@@ -43,7 +44,7 @@ def course(request, category, number):
         difficulty_average = 0
         instructor_average = 0
 
-    reviews_json = json.dumps(list(reviews), cls=DjangoJSONEncoder)
+    reviews_json = json.dumps(list(reviews.values('usefulness_rating', 'difficulty_rating', 'instructor_rating', 'comment', 'instructor', 'taken_season', 'taken_year', 'created_at', 'anonymous', 'author')), cls=DjangoJSONEncoder)
 
     context = {
         'course': course_object,
@@ -51,7 +52,8 @@ def course(request, category, number):
         'difficulty_average': difficulty_average,
         'instructor_average': instructor_average,
         'overall_average': overall_average,
-        'reviews': reviews_json,
+        'reviews_json': reviews_json,
+        'reviews': reviews,
         'syllabus': syllabus
     }
 

@@ -3,7 +3,6 @@
 {% block content %}
 
 <div class="ui container">
-
   <h1>{{ course.code }}</h1>
   <h3>{{ course.title }}</h3>
 
@@ -100,8 +99,6 @@
 
     <button class="ui button" type="submit">Post Review</button>
   </form>
-
-
 </div>
 
 <script type="text/javascript">
@@ -139,10 +136,8 @@
 
       if ($('#id_instructor').dropdown('get text') == "Other") {
         other_instructor = $('#other_instructor_text').val();
-        console.log(other_instructor)
       } else {
         other_instructor = ""
-        console.log(other_instructor)
       }
 
       $.ajax({
