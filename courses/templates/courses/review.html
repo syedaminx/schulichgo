@@ -6,7 +6,7 @@
   <h1>{{ course.code }}</h1>
   <h3>{{ course.title }}</h3>
 
-  <form method="POST" class="ui form" id="post-form">
+  <form method="POST" class="ui form" id="post-form" novalidate>
 
     <h4 class="ui dividing header">General Information</h4>
 
@@ -17,7 +17,7 @@
         <!-- season  -->
         <div class="field">
           <div class="ui selection dropdown" id="id_taken_season">
-            <input type="hidden">
+            <input type="hidden" name="season-dd">
             <i class="dropdown icon"></i>
             <div class="default text">Term</div>
             <div class="menu">
@@ -31,7 +31,7 @@
         <!-- year -->
         <div class="field">
           <div class="ui selection dropdown" id="id_taken_year">
-            <input type="hidden">
+            <input type="hidden" name="year-dd">
             <i class="dropdown icon"></i>
             <div class="default text">Year</div>
             <div class="menu">
@@ -48,7 +48,7 @@
       <div class="field">
         <label for="id_instructor_rating">Instructor</label>
         <div class="ui selection dropdown" id="id_instructor">
-          <input type="hidden" name="taken_season">
+          <input type="hidden" name="instructor-dd">
           <i class="dropdown icon"></i>
           <div class="default text">Instructor</div>
           <div class="menu">
@@ -97,6 +97,8 @@
       </div>
     </div>
 
+    <div class="ui error message"></div>
+
     <button class="ui button" type="submit">Post Review</button>
   </form>
 </div>
@@ -113,6 +115,49 @@
 
     $('.ui.checkbox').checkbox();
 
+    $('.ui.form')
+      .form({
+        on: 'blur',
+        fields: {
+          taken_season: {
+            identifier: 'season-dd',
+            rules: [
+              {
+                type: 'empty',
+                prompt: 'Please select a term.'
+              }
+            ]
+          },
+          taken_year: {
+            identifier: 'year-dd',
+            rules: [
+              {
+                type: 'empty',
+                prompt: 'Please select a year.'
+              }
+            ]
+          },
+          instructor: {
+            identifier: 'instructor-dd',
+            rules: [
+              {
+                type: 'empty',
+                prompt: 'Please select a instructor.'
+              }
+            ]
+          },
+          id_comment: {
+            identifier: 'id_comment',
+            rules: [
+              {
+                type: 'empty',
+                prompt: 'Please write a comment about the course.'
+              }
+            ]
+          }
+        }
+      });
+
     $('#id_instructor').change(function() {
       if ($('#id_instructor').dropdown('get text') == "Other") {
         document.getElementById("other_instructor_div").style.display = "block";
@@ -123,7 +168,9 @@
 
     $('#post-form').on('submit', function(event){
       event.preventDefault();
-      submit_review();
+      if( $('.ui.form').form('is valid')) {
+        submit_review();
+      }
     });
 
     function submit_review() {

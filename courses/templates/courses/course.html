@@ -80,14 +80,12 @@
   {% if reviews %}
     {% for review in reviews %}
       {% if review.anonymous == True %}
-        <p>anonymous</p>
+        <p>Anonymous</p>
         <img src="https://media.gettyimages.com/photos/portrait-of-an-english-bulldog-picture-id164930509?s=612x612" alt="" height=100 width=100>
       {% else %}
         <p>{{ review.author.social_auth.all.0.extra_data.name }}</p>
         <img src="{{ review.author.social_auth.all.0.extra_data.picture.data.url }}" alt="">
       {% endif %}
-
-
       <p>Usefulness: {{ review.usefulness_rating }}</p>
       <p>Difficulty: {{ review.difficulty_rating }}</p>
       <p>Instructor: {{ review.instructor_rating }}</p>

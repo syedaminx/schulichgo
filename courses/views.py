@@ -95,6 +95,7 @@ def review(request, category, number):
             if data['instructor'] == 'Other':
                 instructor_val = data['other_instructor']
                 course_object.instructors.append(instructor_val)
+                course_object.instructors = sorted(course_object.instructors)
                 course_object.save()
             else:
                 instructor_val = data['instructor']
