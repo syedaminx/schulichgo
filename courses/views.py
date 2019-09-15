@@ -4,6 +4,7 @@ from .models import Category, Course, Review, Syllabus
 from .forms import ReviewForm, SyllabusForm
 from django.db.models import Avg
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.core import serializers
 from django.core.serializers.json import DjangoJSONEncoder
 import json
@@ -104,8 +105,8 @@ def review(request, category, number):
             review.course_code = course_object
             review.author = request.user
             review.save()
-            message = {'success': "sucess"}
-            return JsonResponse(message)
+            messages.success(request, 'Your review has been successfully submitted.')
+            return redirect(course, category=category, number=number)
     else:
         form = ReviewForm(instructors=course_object.instructors)
 

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}- Canvas Syllabus Download Tutorial{% endblock title %}
+
+{% block content %}
+  <div class="ui container">
+    <h2>Canvas Syllabus Download Tutorial</h2>
+
+    <h3>Step 1: Navigate to the course's Canvas page and click on Syllabus.</h3>
+    <img src="{% static 'img/canvas_tutorial/1.png' %}" alt="" style="width: 100%; height: auto;">
+
+    <h3>Step 2: Click on Print.</h3>
+    <img src="{% static 'img/canvas_tutorial/2.png' %}" alt="" style="width: 100%; height: auto;">
+
+    <h3>Step 3: Choose "Save as PDF" for Destination.</h3>
+    <img src="{% static 'img/canvas_tutorial/3.png' %}" alt="" style="width: 100%; height: auto;">
+  </div>
+
+{% endblock %}

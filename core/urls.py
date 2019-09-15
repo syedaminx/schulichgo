@@ -9,5 +9,6 @@ urlpatterns = [
     path('social-auth', include('social_django.urls', namespace='social')),
     path('results/', views.search, name='search'),
     path('privacy-policy', views.privacy_policy, name='privacy_policy'),
-    path('terms-of-service', views.terms, name='terms')
+    path('terms-of-service', views.terms, name='terms'),
+    path('canvas-syllabus-tutorial', views.syllabus_tutorial, name='syllabus_tutorial')
 ]

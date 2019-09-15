@@ -27,3 +27,6 @@ def privacy_policy(request):
 
 def terms(request):
     return render(request, "terms.html")
+
+def syllabus_tutorial(request):
+    return render(request, "canvas_tutorial.html")
