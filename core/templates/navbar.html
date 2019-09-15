@@ -10,7 +10,7 @@
     <form method="GET" action="{% url 'search' %}" class="ui search">
       <div class="ui icon input">
         <input class="prompt" type="text" name="q" value="{{ request.GET.get.q }}"placeholder="Search courses...">
-        <i class="search icon" style="cursor: pointer;"></i>
+        <i class="search icon" type="submit"></i>
       </div>
       <!-- <div class="ui icon input">
         <input class="prompt" type="text" name="q" value="{{ request.GET.get.q }}"placeholder="Search courses...">

@@ -11,11 +11,17 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   </head>
   <body>
+    <div class="main">
     {% include './navbar.html' %}
 
     {% block content %}
 
     {% endblock content %}
+    </div>
+
+    <div class="footer">
+    {% include './footer.html' %}
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
   </body>
 </html>

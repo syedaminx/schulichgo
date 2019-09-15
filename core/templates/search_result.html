@@ -1,10 +1,31 @@
 {% extends 'base.html' %}
 
+{% block title %}- Results for {{ query }}{% endblock title %}
+
 {% block content %}
 <div class="ui container">
 
-  <p>hi</p>
-
+  <h2>Results for {{ query|capfirst }}</h2>
+  {% if results %}
+  <table class="ui selectable celled table">
+    <thead>
+      <tr>
+        <th>Course Code</th>
+        <th>Title</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for course in results %}
+      <tr class="selectable"onclick="window.location.href='{% url 'course' category=course.category number=course.number %}'">
+        <td>{{ course.code }}</td>
+        <td>{{ course.title }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p>There were no results for <b>{{ query }}</b>. Please try a different search term.</p>
+  {% endif %}
 
 </div>
 {% endblock %}
