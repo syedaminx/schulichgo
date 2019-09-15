@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-  // syllabus modal
+  // syllabus upload modal
   $('#upload-syllabus').click(function() {
     $('#upload-modal').modal('show');
 
@@ -29,6 +29,10 @@ $(document).ready(function() {
     $(function() {
       $('#syllabus-submit-ajax').click(upload);
     });
+  });
 
+  // syllabus view modal
+  $('#view-syllabus').click(function() {
+    $('#view-modal').modal('show');
   });
 });

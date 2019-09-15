@@ -12,14 +12,25 @@
   <p>{{ course.description }}</p>
 
   {% if syllabus %}
-    <a href="{{ syllabus.syllabus }}">Syllabus</a>
+    <a href="{{ syllabus.syllabus.url }}">Syllabus</a>
+
+    <button class="ui button" id="view-syllabus">View Syllabus</button>
+
+    <div class="ui modal" id="view-modal">
+      <i class="close icon"></i>
+      <div class="header">
+        {{ course.code }} Syllabus
+      </div>
+
+      <div id="example1" style="height: 80vh;"></div>
+    </div>
   {% else %}
-    <button class="ui button" id="upload-syllabus">Upload Course Outline</button>
+    <button class="ui button" id="upload-syllabus">Upload Syllabus</button>
 
     <div class="ui modal" id="upload-modal">
       <i class="close icon"></i>
       <div class="header">
-        {{ course.code }} Syllabus
+        {{ course.code }} Syllabus Upload
       </div>
 
       {% if user.is_authenticated %}
@@ -134,6 +145,8 @@
   <a href="{% url 'review' category=course.category number=course.number %}"><button>Write a Review</button></a>
 </div>
 
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
+  <script>PDFObject.embed("{{ syllabus.syllabus.url }}", "#example1");</script>
   <script type="text/javascript" src="{% static 'js/dropzone.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/course.js' %}"></script>
 
