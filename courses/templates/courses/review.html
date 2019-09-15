@@ -158,6 +158,30 @@
         }
       });
 
+      var rated = true
+
+      function validate_ratings() {
+        var usefulness_rating = $('#id_usefulness_rating').rating('get rating')
+        var difficulty_rating = $('#id_difficulty_rating').rating('get rating')
+        var instructor_rating = $('#id_instructor_rating').rating('get rating')
+
+        if (usefulness_rating == 0) {
+          $('ul').append("<li>Rate the usefulness of this course.</li>")
+          rated = false
+        }
+        if (difficulty_rating == 0) {
+          $('ul').append("<li>Rate the difficulty of this course.</li>")
+          rated = false
+        }
+        if (instructor_rating == 0) {
+          $('ul').append("<li>Rate the instructor for this course.</li>")
+          rated = false
+        }
+        if (usefulness_rating > 0 && difficulty_rating > 0 && instructor_rating > 0) {
+          rated = true
+        }
+      }
+
     $('#id_instructor').change(function() {
       if ($('#id_instructor').dropdown('get text') == "Other") {
         document.getElementById("other_instructor_div").style.display = "block";
@@ -168,7 +192,8 @@
 
     $('#post-form').on('submit', function(event){
       event.preventDefault();
-      if( $('.ui.form').form('is valid')) {
+      validate_ratings();
+      if( $('.ui.form').form('is valid') && rated == true) {
         submit_review();
       }
     });
