@@ -7,56 +7,61 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/basic.min.css">
 
 <div class="ui container">
-  <h1>{{ course.code }}</h1>
-  <h3>{{ course.title }}</h3>
-  <p>{{ course.description }}</p>
-
-  {% if syllabus %}
-    <a href="{{ syllabus.syllabus.url }}">Syllabus</a>
-
-    <button class="ui button" id="view-syllabus">View Syllabus</button>
-
-    <div class="ui modal" id="view-modal">
-      <i class="close icon"></i>
-      <div class="header">
-        {{ course.code }} Syllabus
-      </div>
-
-      <div id="example1" style="height: 80vh;"></div>
+  <div class="ui grid">
+    <div class="twelve wide column">
+      <h1>{{ course.code }}</h1>
     </div>
-  {% else %}
-    <button class="ui button" id="upload-syllabus">Upload Syllabus</button>
 
-    <div class="ui modal" id="upload-modal">
-      <i class="close icon"></i>
-      <div class="header">
-        {{ course.code }} Syllabus Upload
-      </div>
+    <div class="left floated right aligned four wide column">
+      {% if syllabus %}
+        <button class="ui button" id="view-syllabus">View Syllabus</button>
 
-      {% if user.is_authenticated %}
-      <form method="POST" class="dropzone" enctype="multipart/form-data" id="syllabus-form-ajax" url="{% url 'syllabus' id=course.id %}">
-        {% csrf_token %}
-      </form>
+        <div class="ui modal" id="view-modal">
+          <i class="close icon"></i>
+          <div class="header">
+            {{ course.code }} Syllabus
+          </div>
 
-      <div class="actions">
-        <div class="ui black deny button">
-          Cancel
+          <div id="syllabus" style="height: 80vh;"></div>
         </div>
-        <div class="ui positive right labeled icon button" id="syllabus-submit-ajax">
-          Submit
-          <i class="checkmark icon"></i>
-        </div>
-      </div>
       {% else %}
-      <a href="{% url 'login' %}?next={{request.get_full_path}}" class="item">Login</a>
-      <div class="actions">
-        <div class="ui black deny button">
-          Close
+        <button class="ui button" id="upload-syllabus">Upload Syllabus</button>
+
+        <div class="ui modal" id="upload-modal">
+          <i class="close icon"></i>
+          <div class="header">
+            {{ course.code }} Syllabus Upload
+          </div>
+
+          {% if user.is_authenticated %}
+          <form method="POST" class="dropzone" enctype="multipart/form-data" id="syllabus-form-ajax" url="{% url 'syllabus' id=course.id %}">
+            {% csrf_token %}
+          </form>
+
+          <div class="actions">
+            <div class="ui black deny button">
+              Cancel
+            </div>
+            <div class="ui positive right labeled icon button" id="syllabus-submit-ajax">
+              Submit
+              <i class="checkmark icon"></i>
+            </div>
+          </div>
+          {% else %}
+          <a href="{% url 'login' %}?next={{request.get_full_path}}" class="item">Login</a>
+          <div class="actions">
+            <div class="ui black deny button">
+              Close
+            </div>
+          </div>
+          {% endif %}
         </div>
-      </div>
       {% endif %}
     </div>
-  {% endif %}
+  </div>
+  
+  <h3>{{ course.title }}</h3>
+  <p>{{ course.description }}</p>
 
   <h1>Overall: {{ overall_average }}</h1>
   <h2>Usefulness: {{ usefulness_average }}</h2>
@@ -146,7 +151,7 @@
 </div>
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
-  <script>PDFObject.embed("{{ syllabus.syllabus.url }}", "#example1");</script>
+  <script>PDFObject.embed("{{ syllabus.syllabus.url }}", "#syllabus");</script>
   <script type="text/javascript" src="{% static 'js/dropzone.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/course.js' %}"></script>
 
