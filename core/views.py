@@ -30,3 +30,6 @@ def terms(request):
 
 def syllabus_tutorial(request):
     return render(request, "canvas_tutorial.html")
+
+def resources(request):
+    return render(request, "resources.html")

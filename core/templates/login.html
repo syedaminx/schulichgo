@@ -1,3 +1,16 @@
-<button>
-  <a href="{% url 'social:begin' 'facebook' %}{% if request.GET.next %}?next={{request.GET.next}}{% endif %}">Login with Facebook</a>
-</button>
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}- Login{% endblock title %}
+
+{% block content %}
+<div class="ui container">
+  <form action="{% url 'social:begin' 'facebook' %}{% if request.GET.next %}?next={{request.GET.next}}{% endif %}">
+    <button class="ui facebook huge button" type="submit">
+      <i class="facebook icon"></i>
+      Facebook
+    </button>
+  </form>
+</div>
+{% endblock %}

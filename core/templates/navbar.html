@@ -25,7 +25,7 @@
       <a href="{% url 'home' %}" class="item">Courses</a>
     </div>
     <div class="item">
-      <a class="item">Resources</a>
+      <a href="{% url 'resources' %}" class="item">Resources</a>
     </div>
     <div class="item">
       {% if user.is_authenticated %}

@@ -6,14 +6,16 @@ tr.selectable {
   margin-top: 5vh;
 }
 
-.main{min-height:100%;
-      padding-bottom:60px;
-      box-sizing:border-box;}
+.main {
+  min-height:100%;
+  padding-bottom:60px;
+  box-sizing:border-box;
+}
+
 .footer {
-  background-color: #212121;
+  background-color: #1b1c1d;
   position: absolute;
-  /* bottom: 0;  remove this */
-  margin-top: 0vh; /* add this */
+  margin-top: 0vh;
   left: 0;
   width: 100%;
   padding: 15px 0;

@@ -5,18 +5,23 @@
 
 {% block content %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/basic.min.css">
+<link rel="stylesheet" href="{% static 'css/course.css' %}">
 
 <div class="ui container">
 
   <div class="ui grid">
-    <div class="twelve wide column">
+    <div class="ten wide column">
       <h1>{{ course.code }}</h1>
     </div>
 
-    <div class="left floated right aligned four wide column">
+    <div class="left floated right aligned six wide column">
+      <button class="ui right floated labeled icon blue button">
+        <i class="star icon"></i>
+        Write Review
+      </button>
       {% if syllabus %}
       <!-- view syllabus -->
-        <button class="ui button" id="view-syllabus">View Syllabus</button>
+        <button class="ui right floated button" id="view-syllabus">View Syllabus</button>
 
         <div class="ui modal" id="view-modal">
           <i class="close icon"></i>
@@ -24,7 +29,7 @@
             {{ course.code }} Syllabus
           </div>
 
-          <div id="syllabus" style="height: 80vh;"></div>
+          <div id="syllabus"></div>
         </div>
       {% else %}
       <!-- upload syllabus -->
@@ -68,22 +73,17 @@
   </div>
 
   <h3>{{ course.title }}</h3>
-  <p>{{ course.description }}</p>
-
-  <h1>Overall: {{ overall_average }}</h1>
-  <h2>Usefulness: {{ usefulness_average }}</h2>
-  <h2>Difficulty: {{ difficulty_average }}</h2>
-  <h2>Instructor: {{ instructor_average }}</h2>
+  <p>{{ course.description|linebreaks }}</p>
+  <p><small>Last Updated: {{ course.updated_at|date:"N jS, Y" }}</small></p>
 
   <div class="ui horizontal divider">
-    <h4 class="header">
-      <i class="tag icon"></i>
+    <h3 class="header">
       Instructors
     </h4>
   </div>
   {% if course.instructors %}
     {% for instructor in course.instructors %}
-      <button class="ui small button">
+      <button class="ui basic small button" id="instructor-button">
       {{ instructor }}
       </button>
     {% endfor %}
@@ -91,14 +91,78 @@
     <p>There are currently no listed instructors for this course.</p>
   {% endif %}
 
-  <div class="class ui horizontal divider">
-    <h4 class="header">
-      <i class="comment icon"></i>
-      Reviews
-    </h4>
+  <div class="ui horizontal divider">
+    <h3 class="header">
+      {% if reviews %}
+        {% if reviews.count > 1 %}
+          {{ reviews.count }} Reviews
+        {% else %}
+          {{ reviews.count }} Review
+        {% endif %}
+        <div class="ui huge star rating" data-rating="{{ overall_average|floatformat:"0" }}"></div>
+      {% else %}
+        Reviews
+      {% endif %}
+    </h3>
   </div>
 
   {% if reviews %}
+    <div class="ui centered grid">
+      <div class="four column stackable row">
+        <div class="column">
+          <h5 class="review-category-heading">Usefulness</h5>:
+          <div class="ui star rating" data-rating="{{ usefulness_average|floatformat:"0" }}"></div>
+          <span>({{ usefulness_average }})</span>
+        </div>
+        <div class="column">
+          <h5 class="review-category-heading">Difficulty</h5>:
+          <div class="ui star rating" data-rating="{{ difficulty_average|floatformat:"0" }}"></div>
+          <span>({{ difficulty_average }})</span>
+        </div>
+        <div class="column">
+          <h5 class="review-category-heading">Instructor</h5>:
+          <div class="ui star rating" data-rating="{{ instructor_average|floatformat:"0" }}"></div>
+          <span>({{ instructor_average }})</span>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="ui divider"></div>
+
+  <div class="ui card" style="width: 100%">
+    <div class="ui grid">
+      <div class="four wide column">
+        <div class="content">
+          <img class="ui centered small circular image" style="height: 50px; width: 50px;"src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2058424637620395&height=200&width=200&ext=1571163886&hash=AeTQg0wQbnYteWa7" alt="">
+          <div class="meta">
+            <span>Instructor: Amanda Michelle Liscio</span>
+          </div>
+        </div>
+      </div>
+      <div class="twelve wide column">
+        <div class="content">
+          <h4>Syed Amin</h4>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere laudantium quisquam, consectetur ipsa dolores. Nobis pariatur laudantium facilis reiciendis voluptatibus distinctio ipsa unde aut, saepe, ullam exercitationem quos nisi in, ex possimus doloremque ab eaque harum. Reprehenderit praesentium consectetur quaerat vero molestiae architecto odio et ea! Debitis, suscipit enim pariatur.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui card">
+    <div class="content">
+      <div class="header">Syed Amin</div>
+    </div>
+  </div>
+
+  <p>BACKEND REVIEW</p>
+  {% if reviews %}
+    <h1>Overall: {{ overall_average }}</h1>
+    <h2>Usefulness: {{ usefulness_average }}</h2>
+    <h2>Difficulty: {{ difficulty_average }}</h2>
+    <h2>Instructor: {{ instructor_average }}</h2>
     {% for review in reviews %}
       {% if review.anonymous == True %}
         <p>Anonymous</p>
@@ -124,15 +188,13 @@
 
   <button class="test-button">Test</button>
 
+
   <script>
     var reviews = '{{ reviews_json|safe }}'
     var reviews_json = JSON.parse(reviews)
 
-    console.log(reviews_json)
+    $(document).ready(function() {
 
-    // conditional formatting, when the button is clicked, if the review was for Ziyao San, it will be displayed
-
-    $(document).ready(function(){
       $(".test-button").click(function(){
         for (x in reviews_json) {
         	if (reviews_json[x].instructor == "Ziyao San") {
@@ -158,8 +220,8 @@
             .closest('.message')
             .transition('fade')
           ;
-        })
-      ;
+        });
+    }
     });
   </script>
 
@@ -170,5 +232,14 @@
   <script>PDFObject.embed("{{ syllabus.syllabus.url }}", "#syllabus");</script>
   <script type="text/javascript" src="{% static 'js/dropzone.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/course.js' %}"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.rating').rating({
+        initialRating: 0,
+        maxRating: 5
+      });
 
+      $('.rating').rating('disable')
+    });
+  </script>
 {% endblock content %}
