@@ -47,6 +47,7 @@ def course(request, category, number):
 
     reviews_json = json.dumps(list(reviews.values('usefulness_rating', 'difficulty_rating', 'instructor_rating', 'comment', 'instructor', 'taken_season', 'taken_year', 'created_at', 'anonymous', 'author')), cls=DjangoJSONEncoder)
 
+
     context = {
         'course': course_object,
         'usefulness_average': usefulness_average,

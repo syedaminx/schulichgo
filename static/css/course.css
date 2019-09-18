@@ -6,6 +6,30 @@
   margin-bottom: 10px;
 }
 
+#review-left-col {
+  margin-left: 5%;
+}
+
+
 .review-category-heading {
   display: inline;
+}
+
+.ui.small.circular.image {
+  height: 50px;
+  width: 50px;
+}
+
+/* smartphone to low-res tablet/landscape mobile */
+@media (min-width: 320px) and (max-width: 767px) {
+
+  .header-btn {
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
+  }
+
+  #review-column {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+  }
 }

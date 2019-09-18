@@ -10,64 +10,63 @@
 <div class="ui container">
 
   <div class="ui grid">
-    <div class="ten wide column">
+    <div class="six wide column">
       <h1>{{ course.code }}</h1>
     </div>
 
-    <div class="left floated right aligned six wide column">
-      <button class="ui right floated labeled icon blue button">
-        <i class="star icon"></i>
+    {# conditional logic = if there is syllabus uploaded for the course, view syllabus button, if there isn't, show upload syllabus button #}
+    <div class="right floated right aligned ten wide column">
+      <button onclick="window.location.href = '{% url 'review' category=course.category number=course.number %}'" class="ui floated blue button header-btn">
         Write Review
       </button>
       {% if syllabus %}
-      <!-- view syllabus -->
-        <button class="ui right floated button" id="view-syllabus">View Syllabus</button>
+      {# view syllabus #}
+      <button class="ui right floated button header-btn" id="view-syllabus">View Syllabus</button>
 
-        <div class="ui modal" id="view-modal">
-          <i class="close icon"></i>
-          <div class="header">
-            {{ course.code }} Syllabus
-          </div>
-
-          <div id="syllabus"></div>
+      <div class="ui modal" id="view-modal">
+        <i class="close icon"></i>
+        <div class="header">
+          {{ course.code }} Syllabus
         </div>
+        <div id="syllabus"></div>
+      </div>
       {% else %}
-      <!-- upload syllabus -->
-        <button class="ui button" id="upload-syllabus">Upload Syllabus</button>
+      {# upload syllabus #}
+      <button class="ui button" id="upload-syllabus">Upload Syllabus</button>
 
-        <div class="ui modal" id="upload-modal">
-          <i class="close icon"></i>
-          <div class="header">
-            {{ course.code }} Syllabus Upload
-          </div>
-
-          {% if user.is_authenticated %}
-          <form method="POST" class="dropzone" enctype="multipart/form-data" id="syllabus-form-ajax" url="{% url 'syllabus' id=course.id %}" action="/file-upload" style="height: 50vh;">
-            {% csrf_token %}
-          </form>
-
-          <script>
-            $("#syllabus-form-ajax").dropzone();
-          </script>
-
-          <div class="actions">
-            <div class="ui black deny button">
-              Cancel
-            </div>
-            <div class="ui positive right labeled icon button" id="syllabus-submit-ajax">
-              Submit
-              <i class="checkmark icon"></i>
-            </div>
-          </div>
-          {% else %}
-          <a href="{% url 'login' %}?next={{request.get_full_path}}" class="item">Login</a>
-          <div class="actions">
-            <div class="ui black deny button">
-              Close
-            </div>
-          </div>
-          {% endif %}
+      <div class="ui modal" id="upload-modal">
+        <i class="close icon"></i>
+        <div class="header">
+          {{ course.code }} Syllabus Upload
         </div>
+
+        {% if user.is_authenticated %}
+        <form method="POST" class="dropzone" enctype="multipart/form-data" id="syllabus-form-ajax" url="{% url 'syllabus' id=course.id %}" action="/file-upload" style="height: 50vh;">
+          {% csrf_token %}
+        </form>
+
+        <script>
+          $("#syllabus-form-ajax").dropzone();
+        </script>
+
+        <div class="actions">
+          <div class="ui black deny button">
+            Cancel
+          </div>
+          <div class="ui positive right labeled icon button" id="syllabus-submit-ajax">
+            Submit
+            <i class="checkmark icon"></i>
+          </div>
+        </div>
+        {% else %}
+        <a href="{% url 'login' %}?next={{request.get_full_path}}" class="item">Login</a>
+        <div class="actions">
+          <div class="ui black deny button">
+            Close
+          </div>
+        </div>
+        {% endif %}
+      </div>
       {% endif %}
     </div>
   </div>
@@ -79,167 +78,181 @@
   <div class="ui horizontal divider">
     <h3 class="header">
       Instructors
-    </h4>
+      </h4>
   </div>
   {% if course.instructors %}
-    {% for instructor in course.instructors %}
-      <button class="ui basic small button" id="instructor-button">
-      {{ instructor }}
-      </button>
-    {% endfor %}
+  {% for instructor in course.instructors %}
+  <button class="ui basic small button" id="instructor-button">
+    {{ instructor }}
+  </button>
+  {% endfor %}
   {% else %}
-    <p>There are currently no listed instructors for this course.</p>
+  <p>There are currently no listed instructors for this course.</p>
   {% endif %}
 
   <div class="ui horizontal divider">
     <h3 class="header">
       {% if reviews %}
-        {% if reviews.count > 1 %}
-          {{ reviews.count }} Reviews
-        {% else %}
-          {{ reviews.count }} Review
-        {% endif %}
-        <div class="ui huge star rating" data-rating="{{ overall_average|floatformat:"0" }}"></div>
+      {% if reviews.count > 1 %}
+      {{ reviews.count }} Reviews
       {% else %}
-        Reviews
+      {{ reviews.count }} Review
+      {% endif %}
+      <div class="ui huge star rating" data-rating="{{ overall_average|floatformat:"0" }}"></div>
+      {% else %}
+      Reviews
       {% endif %}
     </h3>
   </div>
 
   {% if reviews %}
-    <div class="ui centered grid">
-      <div class="four column stackable row">
-        <div class="column">
-          <h5 class="review-category-heading">Usefulness</h5>:
-          <div class="ui star rating" data-rating="{{ usefulness_average|floatformat:"0" }}"></div>
-          <span>({{ usefulness_average }})</span>
-        </div>
-        <div class="column">
-          <h5 class="review-category-heading">Difficulty</h5>:
-          <div class="ui star rating" data-rating="{{ difficulty_average|floatformat:"0" }}"></div>
-          <span>({{ difficulty_average }})</span>
-        </div>
-        <div class="column">
-          <h5 class="review-category-heading">Instructor</h5>:
-          <div class="ui star rating" data-rating="{{ instructor_average|floatformat:"0" }}"></div>
-          <span>({{ instructor_average }})</span>
-        </div>
+  <div class="ui centered grid">
+    <div class="four column stackable row">
+      <div class="column">
+        <h5 class="review-category-heading">Usefulness</h5>:
+        <div class="ui star rating" data-rating="{{ usefulness_average|floatformat:"0" }}"></div>
+        <span>({{ usefulness_average }})</span>
+      </div>
+      <div class="column">
+        <h5 class="review-category-heading">Difficulty</h5>:
+        <div class="ui star rating" data-rating="{{ difficulty_average|floatformat:"0" }}"></div>
+        <span>({{ difficulty_average }})</span>
+      </div>
+      <div class="column">
+        <h5 class="review-category-heading">Instructor</h5>:
+        <div class="ui star rating" data-rating="{{ instructor_average|floatformat:"0" }}"></div>
+        <span>({{ instructor_average }})</span>
       </div>
     </div>
+  </div>
+  {% else %}
+  <p>There are currently no reviews for this course.</p>
   {% endif %}
 
   <div class="ui divider"></div>
 
-  <div class="ui card" style="width: 100%">
-    <div class="ui grid">
-      <div class="four wide column">
-        <div class="content">
-          <img class="ui centered small circular image" style="height: 50px; width: 50px;"src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2058424637620395&height=200&width=200&ext=1571163886&hash=AeTQg0wQbnYteWa7" alt="">
-          <div class="meta">
-            <span>Instructor: Amanda Michelle Liscio</span>
+  {% if reviews %}
+  <div class="reviews">
+  {% for review in reviews %}
+    <div class="review" data-instructor="{{ review.instructor }}" style="width: 100%">
+      <div class="ui grid">
+        <div class="four wide column">
+          <div class="content" id="review-left-col">
+            {# if review is anonymous, show generic image, else show facebook profile pic #}
+            {% if review.anonymous == True %}
+            <img class="ui small circular image" src="https://media.gettyimages.com/photos/portrait-of-an-english-bulldog-picture-id164930509?s=612x612" alt="">
+            <p>Anonymous</p>
+            {% else %}
+            <img class="ui small circular image" src="{{ review.author.social_auth.all.0.extra_data.picture.data.url }}" alt="">
+            <p>{{ review.author.social_auth.all.0.extra_data.name }}</p>
+            {% endif %}
+            <div class="meta">
+              Session: {{ review.taken_season }} {{ review.taken_year }}
+            </div>
+            <div class="meta">
+              Instructor: {{ review.instructor }}
+            </div>
+            <div class="meta">
+              {{ review.created_at|date:"N jS, Y"  }}
+            </div>
+          </div>
+        </div>
+        <div class="twelve wide column">
+          <div class="ui grid">
+          <div class="four column stackable row">
+            <div class="column" id="review-column">
+              <div class="meta">
+                Usefulness:
+                <div class="ui star rating" data-rating="{{ review.usefulness_rating }}"></div>
+              </div>
+            </div>
+            <div class="column" id="review-column">
+              <div class="meta">
+                Difficulty:
+                <div class="ui star rating" data-rating="{{ review.difficulty_rating }}"></div>
+              </div>
+            </div>
+            <div class="column" id="review-column">
+              <div class="meta">
+                Instructor:
+                <div class="ui star rating" data-rating="{{ review.instructor_rating }}"></div>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="content">
+            <p>
+              {{ review.comment|linebreaks }}
+            </p>
           </div>
         </div>
       </div>
-      <div class="twelve wide column">
-        <div class="content">
-          <h4>Syed Amin</h4>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere laudantium quisquam, consectetur ipsa dolores. Nobis pariatur laudantium facilis reiciendis voluptatibus distinctio ipsa unde aut, saepe, ullam exercitationem quos nisi in, ex possimus doloremque ab eaque harum. Reprehenderit praesentium consectetur quaerat vero molestiae architecto odio et ea! Debitis, suscipit enim pariatur.
-          </p>
-        </div>
-      </div>
-    </div>
+      <div class="ui divider"></div>
+      {% endfor %}
   </div>
+</div>
+    {% else %}
+    <p>There are no reviews.</p>
+    {% endif %}
 
-  <div class="ui card">
-    <div class="content">
-      <div class="header">Syed Amin</div>
-    </div>
-  </div>
+      <button class="test-button">Test</button>
 
-  <p>BACKEND REVIEW</p>
-  {% if reviews %}
-    <h1>Overall: {{ overall_average }}</h1>
-    <h2>Usefulness: {{ usefulness_average }}</h2>
-    <h2>Difficulty: {{ difficulty_average }}</h2>
-    <h2>Instructor: {{ instructor_average }}</h2>
-    {% for review in reviews %}
-      {% if review.anonymous == True %}
-        <p>Anonymous</p>
-        <img src="https://media.gettyimages.com/photos/portrait-of-an-english-bulldog-picture-id164930509?s=612x612" alt="" height=100 width=100>
-      {% else %}
-        <p>{{ review.author.social_auth.all.0.extra_data.name }}</p>
-        <img src="{{ review.author.social_auth.all.0.extra_data.picture.data.url }}" alt="">
-      {% endif %}
-      <p>Usefulness: {{ review.usefulness_rating }}</p>
-      <p>Difficulty: {{ review.difficulty_rating }}</p>
-      <p>Instructor: {{ review.instructor_rating }}</p>
-      <p>Comment: {{ review.comment }}</p>
-      <p>Instructor: {{ review.instructor }}</p>
-      <p>Session: {{ review.taken_season }} {{ review.taken_year }}</p>
-      <p>{{ review.created_at|date:"N jS, Y"  }}</p>
-
-    {% endfor %}
-  {% else %}
-    <p>Unforunately, there are no reviews for this course yet</p>
-  {% endif %}
-
-  <img src="{{ review.author.social_auth.all.0.extra_data.picture.data.url }}" alt="">
-
-  <button class="test-button">Test</button>
-
-
-  <script>
-    var reviews = '{{ reviews_json|safe }}'
-    var reviews_json = JSON.parse(reviews)
-
-    $(document).ready(function() {
-
-      $(".test-button").click(function(){
-        for (x in reviews_json) {
-        	if (reviews_json[x].instructor == "Ziyao San") {
-            if (reviews_json[x].anonymous = true) {
-              $(".test-button").after(document.createElement("p").innerHTML = "Anonymous");
-            } else {
-              $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].author);
-            }
-            $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].usefulness_rating);
-            $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].difficulty_rating);
-            $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].instructor_rating);
-            $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].comment);
-            $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].instructor);
-            $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].taken_year);
-            $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].created_at);
-            }
-        }
-      });
-
-      $('.message .close')
-        .on('click', function() {
-          $(this)
-            .closest('.message')
-            .transition('fade')
-          ;
-        });
-    }
-    });
-  </script>
-
-  <a href="{% url 'review' category=course.category number=course.number %}"><button>Write a Review</button></a>
+      <button onclick="window.location.href = '{% url 'review' category=course.category number=course.number %}'" class="ui floated blue button header-btn">
+        Write Review
+      </button>
 </div>
 
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
-  <script>PDFObject.embed("{{ syllabus.syllabus.url }}", "#syllabus");</script>
-  <script type="text/javascript" src="{% static 'js/dropzone.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/course.js' %}"></script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $('.rating').rating({
-        initialRating: 0,
-        maxRating: 5
-      });
 
-      $('.rating').rating('disable')
+<script>
+  var reviews = '{{ reviews_json|safe }}'
+  reviews = JSON.stringify(reviews)
+  var reviews_json = JSON.parse(reviews)
+  console.log(reviews_json[0])
+
+  $(document).ready(function() {
+
+    $(".test-button").click(function() {
+      for (x in reviews_json) {
+        if (reviews_json[x].instructor == "Ziyao San") {
+          if (reviews_json[x].anonymous = true) {
+            $(".test-button").after(document.createElement("p").innerHTML = "Anonymous");
+          } else {
+            $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].author);
+          }
+          $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].usefulness_rating);
+          $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].difficulty_rating);
+          $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].instructor_rating);
+          $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].comment);
+          $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].instructor);
+          $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].taken_year);
+          $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].created_at);
+        }
+      }
     });
-  </script>
+
+    $('.message .close')
+      .on('click', function() {
+        $(this)
+          .closest('.message')
+          .transition('fade');
+      });
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
+<script>
+  PDFObject.embed("{{ syllabus.syllabus.url }}", "#syllabus");
+</script>
+<script type="text/javascript" src="{% static 'js/dropzone.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/course.js' %}"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.rating').rating({
+      initialRating: 0,
+      maxRating: 5
+    });
+
+    $('.rating').rating('disable')
+  });
+</script>
 {% endblock content %}
