@@ -10,6 +10,9 @@
   margin-left: 5%;
 }
 
+#meta-item {
+  margin-top: 3vh !important;
+}
 
 .review-category-heading {
   display: inline;
@@ -31,5 +34,9 @@
   #review-column {
     padding-top: 5px !important;
     padding-bottom: 5px !important;
+  }
+
+  #review-meta {
+    margin-top: 1vh !important
   }
 }

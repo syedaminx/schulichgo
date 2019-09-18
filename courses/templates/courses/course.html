@@ -140,20 +140,34 @@
           <div class="content" id="review-left-col">
             {# if review is anonymous, show generic image, else show facebook profile pic #}
             {% if review.anonymous == True %}
-            <img class="ui small circular image" src="https://media.gettyimages.com/photos/portrait-of-an-english-bulldog-picture-id164930509?s=612x612" alt="">
-            <p>Anonymous</p>
+            <div class="ui horizontal list">
+              <div class="item">
+                <div class="ui sub header">
+                  <img class="ui small circular image" src="https://media.gettyimages.com/photos/portrait-of-an-english-bulldog-picture-id164930509?s=612x612" alt="">
+                  Anonymous
+                </div>
+              </div>
+            </div>
             {% else %}
-            <img class="ui small circular image" src="{{ review.author.social_auth.all.0.extra_data.picture.data.url }}" alt="">
-            <p>{{ review.author.social_auth.all.0.extra_data.name }}</p>
+            <div class="ui horizontal list">
+              <div class="item">
+                <div class="ui sub header">
+                  <img class="ui small circular image" src="{{ review.author.social_auth.all.0.extra_data.picture.data.url }}" alt="">
+                  {{ review.author.social_auth.all.0.extra_data.name }}
+                </div>
+              </div>
+            </div>
             {% endif %}
-            <div class="meta">
-              Session: {{ review.taken_season }} {{ review.taken_year }}
-            </div>
-            <div class="meta">
-              Instructor: {{ review.instructor }}
-            </div>
-            <div class="meta">
-              {{ review.created_at|date:"N jS, Y"  }}
+            <div class="item" id="meta-item">
+              <div class="meta" id="review-meta">
+                Session: {{ review.taken_season }} {{ review.taken_year }}
+              </div>
+              <div class="meta" id="review-meta">
+                Instructor: {{ review.instructor }}
+              </div>
+              <div class="meta" id="review-meta">
+                {{ review.created_at|date:"N jS, Y"  }}
+              </div>
             </div>
           </div>
         </div>
@@ -195,8 +209,6 @@
     <p>There are no reviews.</p>
     {% endif %}
 
-      <button class="test-button">Test</button>
-
       <button onclick="window.location.href = '{% url 'review' category=course.category number=course.number %}'" class="ui floated blue button header-btn">
         Write Review
       </button>
@@ -210,25 +222,6 @@
   console.log(reviews_json[0])
 
   $(document).ready(function() {
-
-    $(".test-button").click(function() {
-      for (x in reviews_json) {
-        if (reviews_json[x].instructor == "Ziyao San") {
-          if (reviews_json[x].anonymous = true) {
-            $(".test-button").after(document.createElement("p").innerHTML = "Anonymous");
-          } else {
-            $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].author);
-          }
-          $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].usefulness_rating);
-          $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].difficulty_rating);
-          $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].instructor_rating);
-          $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].comment);
-          $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].instructor);
-          $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].taken_year);
-          $(".test-button").after(document.createElement("p").innerHTML = reviews_json[x].created_at);
-        }
-      }
-    });
 
     $('.message .close')
       .on('click', function() {
