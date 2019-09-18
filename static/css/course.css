@@ -2,16 +2,16 @@
   height: 80vh;
 }
 
-#instructor-button {
-  margin-bottom: 10px;
-}
-
 #review-left-col {
   margin-left: 5%;
 }
 
 #meta-item {
   margin-top: 3vh !important;
+}
+
+.instructor-button {
+  margin-bottom: 10px !important;
 }
 
 .review-category-heading {
@@ -21,6 +21,10 @@
 .ui.small.circular.image {
   height: 50px;
   width: 50px;
+}
+
+.message-div {
+  margin-bottom: 10px;
 }
 
 /* smartphone to low-res tablet/landscape mobile */

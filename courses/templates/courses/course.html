@@ -82,7 +82,7 @@
   </div>
   {% if course.instructors %}
   {% for instructor in course.instructors %}
-  <button class="ui basic small button" id="instructor-button">
+  <button class="ui basic small button instructor-button" id="{{ instructor.split|join:"_" }}">
     {{ instructor }}
   </button>
   {% endfor %}
@@ -130,11 +130,10 @@
   {% endif %}
 
   <div class="ui divider"></div>
-
   {% if reviews %}
   <div class="reviews">
-  {% for review in reviews %}
-    <div class="review" data-instructor="{{ review.instructor }}" style="width: 100%">
+    {% for review in reviews %}
+    <div class="review" data-instructor="{{ review.instructor.split|join:"_" }}" style="width: 100%" id="review">
       <div class="ui grid">
         <div class="four wide column">
           <div class="content" id="review-left-col">
@@ -173,26 +172,26 @@
         </div>
         <div class="twelve wide column">
           <div class="ui grid">
-          <div class="four column stackable row">
-            <div class="column" id="review-column">
-              <div class="meta">
-                Usefulness:
-                <div class="ui star rating" data-rating="{{ review.usefulness_rating }}"></div>
+            <div class="four column stackable row">
+              <div class="column" id="review-column">
+                <div class="meta">
+                  Usefulness:
+                  <div class="ui star rating" data-rating="{{ review.usefulness_rating }}"></div>
+                </div>
+              </div>
+              <div class="column" id="review-column">
+                <div class="meta">
+                  Difficulty:
+                  <div class="ui star rating" data-rating="{{ review.difficulty_rating }}"></div>
+                </div>
+              </div>
+              <div class="column" id="review-column">
+                <div class="meta">
+                  Instructor:
+                  <div class="ui star rating" data-rating="{{ review.instructor_rating }}"></div>
+                </div>
               </div>
             </div>
-            <div class="column" id="review-column">
-              <div class="meta">
-                Difficulty:
-                <div class="ui star rating" data-rating="{{ review.difficulty_rating }}"></div>
-              </div>
-            </div>
-            <div class="column" id="review-column">
-              <div class="meta">
-                Instructor:
-                <div class="ui star rating" data-rating="{{ review.instructor_rating }}"></div>
-              </div>
-            </div>
-          </div>
           </div>
           <div class="content">
             <p>
@@ -202,26 +201,57 @@
         </div>
       </div>
       <div class="ui divider"></div>
+      </div>
       {% endfor %}
+      <div class="message-div"></div>
   </div>
-</div>
-    {% else %}
-    <p>There are no reviews.</p>
-    {% endif %}
+  {% else %}
+  <p>There are no reviews.</p>
+  {% endif %}
 
-      <button onclick="window.location.href = '{% url 'review' category=course.category number=course.number %}'" class="ui floated blue button header-btn">
-        Write Review
-      </button>
+  <button onclick="window.location.href = '{% url 'review' category=course.category number=course.number %}'" class="ui floated blue labeled icon button header-btn" id="review-button-test">
+    <i class="star icon"></i>
+    Write Review
+  </button>
 </div>
 
 
 <script>
-  var reviews = '{{ reviews_json|safe }}'
-  reviews = JSON.stringify(reviews)
-  var reviews_json = JSON.parse(reviews)
-  console.log(reviews_json[0])
-
   $(document).ready(function() {
+
+  $('.instructor-button').click(function() {
+    var instructor = this.id;
+
+    if ($(this).data('clicked')) {
+      console.log("clicked")
+    }
+    // hiding all the review divs
+    $('.review').hide()
+
+    // checking to see if there is a review with the instructor selected
+    if ($('.review[data-instructor="' + instructor + '"]').data('instructor') == undefined) {
+      // if there isnt, let the user know
+      $( '.message-div' ).append("<p>There are currently no reviews for this instructor.</p>");
+    } else {
+      // otherwise, show the reviews that are for this instructor
+      $('.review[data-instructor="' + instructor + '"]').show()
+    }
+  })
+
+    // $('.instructor-button').click(function() {
+    //   var instructor = this.id;
+    // $('.review').toggle()
+    //
+    // if ($('.review[data-instructor="' + instructor + '"]').data('instructor') == undefined) {
+    //   console.log("no instructor found")
+    //   noInstructor = "<p>There are currently no reviews for this instructor.</p>"
+    //
+    //   $( '.message-div' ).append(noInstructor);
+    //
+    // } else {
+    //   $('.review[data-instructor="' + instructor + '"]').show()
+    // }
+    // });
 
     $('.message .close')
       .on('click', function() {
