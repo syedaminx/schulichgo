@@ -25,6 +25,7 @@
 
 .message-div {
   margin-bottom: 10px;
+  display: none;
 }
 
 /* smartphone to low-res tablet/landscape mobile */

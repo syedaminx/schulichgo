@@ -9,4 +9,4 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('course_code', 'created_at', 'instructor')
+    list_display = ('course_code', 'comment', 'created_at', 'instructor')

@@ -1,8 +1,33 @@
-/* should only apply on desktop sized screens */
-#category-card {
-  transition: all .2s ease-in-out;
+/*
+  ##Device = Desktops
+  ##Screen = 1281px to higher resolution desktops
+*/
+
+@media (min-width: 1281px) {
+
+  #category-card {
+    transition: all .2s ease-in-out;
+  }
+  #category-card:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+
 }
-#category-card:hover {
-  transform: scale(1.05);
-  cursor: pointer;
+
+/*
+  ##Device = Laptops, Desktops
+  ##Screen = B/w 1025px to 1280px
+*/
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+
+  #category-card {
+    transition: all .2s ease-in-out;
+  }
+  #category-card:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+
 }

@@ -60,5 +60,5 @@ window.onload = function() {
   ];
 
   // search script
-  $('.ui.search').search({type: 'category', source: categoryContent});
+  // $('.ui.search').search({type: 'category', source: categoryContent});
 }

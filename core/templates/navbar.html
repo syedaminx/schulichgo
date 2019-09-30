@@ -7,19 +7,14 @@
     <a href="{% url 'home' %}" class="item header">SchulichGO</a>
   </div>
   <div class="item">
-    <form method="GET" action="{% url 'search' %}" class="ui search">
-      <div class="ui icon input">
-        <input class="prompt" type="text" name="q" value="{{ request.GET.get.q }}"placeholder="Search courses...">
-        <i class="search icon" type="submit"></i>
-      </div>
-      <!-- <div class="ui icon input">
-        <input class="prompt" type="text" name="q" value="{{ request.GET.get.q }}"placeholder="Search courses...">
+    <form class="ui action input" method="GET" action="{% url 'search' %}" autocomplete="off">
+      <input type="text" placeholder="Search for a course..." class="prompt" name="q" value="{{ request.GET.get.q }}">
+      <button class="ui icon button">
         <i class="search icon"></i>
-        <button type="submit"></button>
-      </div> -->
-      <div class="results"></div>
+      </button>
     </form>
   </div>
+
   <div class="right menu">
     <div class="item">
       <a href="{% url 'home' %}" class="item">Courses</a>

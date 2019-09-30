@@ -45,10 +45,6 @@
           {% csrf_token %}
         </form>
 
-        <script>
-          $("#syllabus-form-ajax").dropzone();
-        </script>
-
         <div class="actions">
           <div class="ui black deny button">
             Cancel
@@ -142,7 +138,7 @@
             <div class="ui horizontal list">
               <div class="item">
                 <div class="ui sub header">
-                  <img class="ui small circular image" src="https://media.gettyimages.com/photos/portrait-of-an-english-bulldog-picture-id164930509?s=612x612" alt="">
+                  <img class="ui small circular image" src="{% static 'img/bulldog.png' %}" alt="" style="object-fit: contain;"> 
                   Anonymous
                 </div>
               </div>
@@ -203,7 +199,9 @@
       <div class="ui divider"></div>
       </div>
       {% endfor %}
-      <div class="message-div"></div>
+      <div class="message-div">
+        <p>There are currently no reviews for this instructor.</p>
+      </div>
   </div>
   {% else %}
   <p>There are no reviews.</p>
@@ -217,6 +215,7 @@
 
 
 <script>
+
   $(document).ready(function() {
 
   $('.instructor-button').click(function() {
@@ -226,7 +225,7 @@
       console.log("clicked")
     }
     // hiding all the review divs
-    $('.review').hide()
+    $('.review').toggle()
 
     // checking to see if there is a review with the instructor selected
     if ($('.review[data-instructor="' + instructor + '"]').data('instructor') == undefined) {
@@ -237,21 +236,6 @@
       $('.review[data-instructor="' + instructor + '"]').show()
     }
   })
-
-    // $('.instructor-button').click(function() {
-    //   var instructor = this.id;
-    // $('.review').toggle()
-    //
-    // if ($('.review[data-instructor="' + instructor + '"]').data('instructor') == undefined) {
-    //   console.log("no instructor found")
-    //   noInstructor = "<p>There are currently no reviews for this instructor.</p>"
-    //
-    //   $( '.message-div' ).append(noInstructor);
-    //
-    // } else {
-    //   $('.review[data-instructor="' + instructor + '"]').show()
-    // }
-    // });
 
     $('.message .close')
       .on('click', function() {

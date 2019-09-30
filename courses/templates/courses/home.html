@@ -9,7 +9,7 @@
   <div class="ui four stackable cards">
     {% for category in categories %}
       <div class="card" id="category-card" onclick="window.location.href='{% url 'category' category=category.category %}'">
-        <div class="image">
+        <div class="image" style="object-fit: cover;">
           <img src="{% static 'img/categories/'|add:category.category|add:'.jpg' %}" alt="" onerror="this.onerror=null;this.src='{% static 'img/categories/General'|add:'.jpg' %}'">
         </div>
         <div class="content">

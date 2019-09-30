@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.db.models import Q
 from courses.models import Course
 from courses.views import home
+from .forms import FeedbackForm
 
 def login(request):
     return render(request, "login.html")
@@ -33,3 +34,17 @@ def syllabus_tutorial(request):
 
 def resources(request):
     return render(request, "resources.html")
+
+def feedback(request):
+    form = FeedbackForm()
+    if request.method == 'POST':
+        print(form)
+        if form.is_valid():
+            feedback = form.save(commit=False)
+            feedback.author = request.user
+            feedback.save()
+
+            return redirect('home')
+        else:
+            form = FeedbackForm()
+    return render(request, "feedback.html", {'form': form})

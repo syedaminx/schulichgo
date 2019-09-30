@@ -19,6 +19,10 @@
   color: var(--primary-color);
 }
 
+.ui.menu:not(.vertical) .item>.input {
+  margin: 0;
+}
+
 /* Mobile */
 @media only screen and (max-width: 767px) {
 
