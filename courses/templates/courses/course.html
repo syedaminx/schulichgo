@@ -245,7 +245,7 @@
       }
     } else {
       // if they click on the currently selected instructor
-      if ($('.review[data-instructor="' + instructor + '"]').is(':visible')) {
+      if ($('.review[data-instructor="' + instructor + '"]').is(':visible') || ($('.review[data-instructor="' + instructor + '"]').data('instructor') == undefined)) {
         $('.review').show(500)
         current_instructor = 0
       } else {
