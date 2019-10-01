@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
   // star ratings
   $('.rating').rating({
     initialRating: 0,

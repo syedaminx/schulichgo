@@ -43,6 +43,9 @@
         {% if user.is_authenticated %}
         <form method="POST" class="dropzone" enctype="multipart/form-data" id="syllabus-form-ajax" url="{% url 'syllabus' id=course.id %}" action="/file-upload" style="height: 50vh;">
           {% csrf_token %}
+          <div class="dz-message needsclick" style="text-align: center;">
+            Drag and drop the syllabus or click here to upload.
+          </div>
         </form>
 
         <div class="actions">
