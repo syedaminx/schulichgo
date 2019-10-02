@@ -6,11 +6,14 @@
 
 {% block content %}
 <div class="ui container">
-  <form action="{% url 'social:begin' 'facebook' %}{% if request.GET.next %}?next={{request.GET.next}}{% endif %}">
-    <button class="ui facebook huge button" type="submit">
-      <i class="facebook icon"></i>
-      Facebook
-    </button>
-  </form>
+  <div class="ui two column grid">
+    <div class="column">
+      <a href="{% url 'social:begin' 'facebook' %}?next={{ request.GET.next }}" class="ui facebook huge button">
+        <i class="facebook icon"></i>
+        Facebook
+      </a>
+    </div>
+  </div>
+
 </div>
 {% endblock %}

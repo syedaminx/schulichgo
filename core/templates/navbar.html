@@ -6,9 +6,9 @@
   <div class="item">
     <a href="{% url 'home' %}" class="item header">SchulichGO</a>
   </div>
-  <div class="item">
+  <div class="item prompt">
     <form class="ui action input" method="GET" action="{% url 'search' %}" autocomplete="off">
-      <input type="text" placeholder="Search for a course..." class="prompt" name="q" value="{{ request.GET.get.q }}">
+      <input type="text" placeholder="Search for a course..." name="q" value="{{ request.GET.get.q }}">
       <button class="ui icon button">
         <i class="search icon"></i>
       </button>
