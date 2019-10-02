@@ -1,5 +1,14 @@
 $(document).ready(function() {
 
+  $('input:text, .ui.button', '.ui.action.input').on('click', function (e) {
+    $('input:file', $(e.target).parents()).click();
+});
+
+$('input:file', '.ui.action.input').on('change', function (e) {
+    var name = e.target.files[0].name;
+    $('input:text', $(e.target).parent()).val(name);
+});
+
   // star ratings
   $('.rating').rating({
     initialRating: 0,
@@ -15,9 +24,12 @@ $(document).ready(function() {
     var url = $('#syllabus-form-ajax').attr('url')
     var method = $('#syllabus-form-ajax').attr('method')
 
+    console.log(url)
+
     function upload(event) {
       event.preventDefault();
       var data = new FormData($('#syllabus-form-ajax').get(0));
+      console.log(data)
 
       $.ajax({
         url: url,
@@ -69,6 +81,7 @@ $(document).ready(function() {
     } else {
       // if they click on the currently selected instructor
       if ($('.review[data-instructor="' + instructor + '"]').is(':visible') || ($('.review[data-instructor="' + instructor + '"]').data('instructor') == undefined)) {
+        // show all the reviews
         $('.review').show(500)
         $( '.message-div' ).hide();
         current_instructor = 0

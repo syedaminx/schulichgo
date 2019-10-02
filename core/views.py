@@ -36,15 +36,15 @@ def resources(request):
     return render(request, "resources.html")
 
 def feedback(request):
-    form = FeedbackForm()
-    if request.method == 'POST':
-        print(form)
+    if request.method == "POST":
+        form = FeedbackForm(request.POST)
         if form.is_valid():
             feedback = form.save(commit=False)
-            feedback.author = request.user
+            user = request.user
+            if user != "AnonymousUser":
+                feedback.author = user            
             feedback.save()
-
             return redirect('home')
-        else:
-            form = FeedbackForm()
+    else:
+        form = FeedbackForm()
     return render(request, "feedback.html", {'form': form})

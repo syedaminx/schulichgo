@@ -17,10 +17,10 @@
     </button>
   </form> -->
 
-  <form method="POST">
+  <form method="POST" class="ui form">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit">
+    <textarea name="comment" cols="40" rows="10" required="" id="id_comment" placeholder="Encountered a bug? Have an idea for a new feature? Tell us so we can make the SchulichGO experience better." style="height: 40vh;"></textarea>
+    <button class="ui button" type="submit" style="margin-top: 10px;">Submit</button>
   </form>
 
 </div>

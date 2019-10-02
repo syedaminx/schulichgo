@@ -24,7 +24,7 @@
     </div>
     <div class="item">
       {% if user.is_authenticated %}
-        <a href="{% url 'logout' %}" class="item">Logout</a>
+        <a href="{% url 'logout' %}?next={{request.get_full_path}}" class="item">Logout</a>
       {% else %}
         <a href="{% url 'login' %}?next={{request.get_full_path}}" class="item">Login</a>
       {% endif %}

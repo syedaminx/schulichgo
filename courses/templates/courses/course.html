@@ -4,7 +4,6 @@
 {% block title %}- {{ course.title }}{% endblock title %}
 
 {% block content %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/basic.min.css">
 <link rel="stylesheet" href="{% static 'css/course.css' %}">
 
 <div class="ui container">
@@ -41,12 +40,18 @@
         </div>
 
         {% if user.is_authenticated %}
-        <form method="POST" class="dropzone" enctype="multipart/form-data" id="syllabus-form-ajax" url="{% url 'syllabus' id=course.id %}" action="/file-upload" style="height: 50vh;">
-          {% csrf_token %}
-          <div class="dz-message needsclick" style="text-align: center;">
-            Drag and drop the syllabus or click here to upload.
+        <div class="field six wide">
+          <label>File</label>
+          <div class="ui action input">
+            <form action="" method="post" enctype="multipart/form-data" id="syllabus-form-ajax" url="{% url 'syllabus' id=course.id %}" action="/file-upload" class="ui form">
+              <input type="text" placeholder="Choose a file..." readonly>
+            	<input type="file" name="File" style="display: none!important;" />
+            	<div class="ui icon button">
+          	    <i class="cloud upload alternate icon"></i>
+          	  </div>
+            </form>
           </div>
-        </form>
+        </div>
 
         <div class="actions">
           <div class="ui black deny button">
@@ -57,6 +62,7 @@
             <i class="checkmark icon"></i>
           </div>
         </div>
+
         {% else %}
         <a href="{% url 'login' %}?next={{request.get_full_path}}" class="item">Login</a>
         <div class="actions">
@@ -65,7 +71,7 @@
           </div>
         </div>
         {% endif %}
-      </div>
+      </div> {# end of modal #}
       {% endif %}
     </div>
   </div>
@@ -138,8 +144,8 @@
     {% for review in reviews %}
     <div class="review" data-instructor="{{ review.instructor.split|join:"_" }}" style="width: 100%" id="review">
       <div class="ui grid">
-        <div class="four wide column">
-          <div class="content" id="review-left-col">
+        <div class="row">
+          <div class="four wide computer five wide mobile column">
             {# if review is anonymous, show generic image, else show facebook profile pic #}
             {% if review.anonymous == True %}
             <div class="ui horizontal list">
@@ -160,6 +166,36 @@
               </div>
             </div>
             {% endif %}
+          </div>
+
+          <div class="twelve wide computer seven wide mobile column">
+            <div class="ui grid">
+              <div class="four column stackable row">
+                <div class="column" id="review-column">
+                  <div class="meta">
+                    Usefulness:
+                    <div class="ui star rating" data-rating="{{ review.usefulness_rating }}"></div>
+                  </div>
+                </div>
+                <div class="column" id="review-column">
+                  <div class="meta">
+                    Difficulty:
+                    <div class="ui star rating" data-rating="{{ review.difficulty_rating }}"></div>
+                  </div>
+                </div>
+                <div class="column" id="review-column">
+                  <div class="meta">
+                    Instructor:
+                    <div class="ui star rating" data-rating="{{ review.instructor_rating }}"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="four wide computer five wide mobile column">
             <div class="item" id="meta-item">
               <div class="meta" id="review-meta">
                 Session: {{ review.taken_season }} {{ review.taken_year }}
@@ -172,34 +208,13 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="twelve wide column">
-          <div class="ui grid">
-            <div class="four column stackable row">
-              <div class="column" id="review-column">
-                <div class="meta">
-                  Usefulness:
-                  <div class="ui star rating" data-rating="{{ review.usefulness_rating }}"></div>
-                </div>
-              </div>
-              <div class="column" id="review-column">
-                <div class="meta">
-                  Difficulty:
-                  <div class="ui star rating" data-rating="{{ review.difficulty_rating }}"></div>
-                </div>
-              </div>
-              <div class="column" id="review-column">
-                <div class="meta">
-                  Instructor:
-                  <div class="ui star rating" data-rating="{{ review.instructor_rating }}"></div>
-                </div>
-              </div>
+
+          <div class="twelve wide computer seven wide mobile column">
+            <div class="content">
+              <p>
+                {{ review.comment|linebreaks }}
+              </p>
             </div>
-          </div>
-          <div class="content">
-            <p>
-              {{ review.comment|linebreaks }}
-            </p>
           </div>
         </div>
       </div>
@@ -224,6 +239,5 @@
 <script>
   PDFObject.embed("{{ syllabus.syllabus.url }}", "#syllabus");
 </script>
-<script type="text/javascript" src="{% static 'js/dropzone.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/course.js' %}"></script>
 {% endblock content %}
