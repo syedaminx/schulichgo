@@ -1,3 +1,7 @@
+.category-img {
+  width: 500px;
+}
+
 /*
   ##Device = Desktops
   ##Screen = 1281px to higher resolution desktops
@@ -11,6 +15,10 @@
   #category-card:hover {
     transform: scale(1.05);
     cursor: pointer;
+  }
+
+  .category-img {
+    max-height: 180px;
   }
 
 }
@@ -28,6 +36,10 @@
   #category-card:hover {
     transform: scale(1.05);
     cursor: pointer;
+  }
+
+  .category-img {
+    max-height: 180px;
   }
 
 }

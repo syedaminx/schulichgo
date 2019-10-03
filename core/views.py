@@ -4,6 +4,7 @@ from django.db.models import Q
 from courses.models import Course
 from courses.views import home
 from .forms import FeedbackForm
+from django.contrib import messages
 
 def login(request):
     return render(request, "login.html")
@@ -42,8 +43,9 @@ def feedback(request):
             feedback = form.save(commit=False)
             user = request.user
             if user != "AnonymousUser":
-                feedback.author = user            
+                feedback.author = user
             feedback.save()
+            messages.success(request, 'Thank you for you feedback!')
             return redirect('home')
     else:
         form = FeedbackForm()
