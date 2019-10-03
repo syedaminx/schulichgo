@@ -5,15 +5,43 @@
 {% block title %}- Login{% endblock title %}
 
 {% block content %}
+<style>
+.center-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 50vh;
+}
+</style>
 <div class="ui container">
-  <div class="ui two column grid">
-    <div class="column">
-      <a href="{% url 'social:begin' 'facebook' %}?next={{ request.GET.next }}" class="ui facebook huge button">
-        <i class="facebook icon"></i>
-        Facebook
-      </a>
+
+  <div class="center-screen">
+    <h2>Login with</h2>
+    <a href="{% url 'social:begin' 'facebook' %}?next={{ request.GET.next }}" class="ui facebook huge button">
+      <i class="facebook icon"></i>
+      Facebook
+    </a>
+  </div>
+
+  <div class="ui accordion" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+    <div class="title">
+      <i class="dropdown icon"></i>
+      Why does SchulichGO require me to login with Facebook?
+    </div>
+    <div class="content">
+      <p>As a Schulich student, you already have accounts on many different platforms. We didn't want you to have to create yet another account, so Facebook is the easiest solution for viewers to know who you are. We are also able to prevent spam reviews by requiring users to be logged in before submitting a review.</p>
     </div>
   </div>
 
 </div>
+
+<script>
+  $(document).ready(function() {
+    $('.ui.accordion')
+    .accordion()
+    ;
+  });
+</script>
 {% endblock %}
