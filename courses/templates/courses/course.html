@@ -7,6 +7,16 @@
 <link rel="stylesheet" href="{% static 'css/course.css' %}">
 
 <div class="ui container">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="ui {% if message.tags == "success" %}positive{% else %}negative{% endif %} message">
+        <i class="close icon"></i>
+        <div class="header">
+          {{ message }}
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
 
   <div class="ui grid">
     <div class="six wide column">
@@ -40,31 +50,38 @@
         </div>
 
         {% if user.is_authenticated %}
-        <div class="field six wide">
-          <label>File</label>
-          <div class="ui action input">
-            <form action="" method="post" enctype="multipart/form-data" id="syllabus-form-ajax" url="{% url 'syllabus' id=course.id %}" action="/file-upload" class="ui form">
-              <input type="text" placeholder="Choose a file..." readonly>
-            	<input type="file" name="File" style="display: none!important;" />
-            	<div class="ui icon button">
-          	    <i class="cloud upload alternate icon"></i>
-          	  </div>
-            </form>
+        <div class="modal-margin">
+          <div class="field six wide">
+            <div class="ui action input" id="upload-modal-div">
+              <form method="post" enctype="multipart/form-data" id="syllabus-form" url="{% url 'syllabus' id=course.id %}" action="{% url 'syllabus' id=course.id %}" class="ui form">
+                {% csrf_token %}
+                <div class="ui icon input syllabus-upload">
+                  <input type="text" placeholder="Choose a file..." readonly class="syllabus-input">
+                  <input type="file" name="syllabus" required id="id_syllabus" style="display: none!important;" />
+                  <i class="inverted circular cloud upload alternate icon"></i>
+                </div>
+              </form>
+            </div>
           </div>
+
+          <p class="login-prompt">Only PDF files under 5 MB are accepted.</p>
+          <a href="{% url 'syllabus_tutorial' %}" target="_blank" class="login-prompt">How do I download syllabuses from Canvas?</a>
         </div>
 
         <div class="actions">
           <div class="ui black deny button">
             Cancel
           </div>
-          <div class="ui positive right labeled icon button" id="syllabus-submit-ajax">
+          <button class="ui positive right labeled icon button" id="syllabus-submit-button" type="submit" form="syllabus-form-ajax" value="Submit">
             Submit
             <i class="checkmark icon"></i>
-          </div>
+          </button>
         </div>
 
         {% else %}
-        <a href="{% url 'login' %}?next={{request.get_full_path}}" class="item">Login</a>
+        <div class="modal-margin">
+          <h4 class="login-prompt">You must <a href="{% url 'login' %}?next={{request.get_full_path}}">login</a> before you can upload a syllabus.</h4>
+        </div>
         <div class="actions">
           <div class="ui black deny button">
             Close

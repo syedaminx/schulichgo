@@ -24,6 +24,28 @@
   display: none;
 }
 
+.modal-margin {
+  height: 25vh;
+}
+
+.login-prompt {
+  margin-left: 10px;
+  margin-top: 10px !important;
+}
+
+.syllabus-upload {
+  margin-left: 10px;
+  margin-top: 10px !important;
+}
+
+.syllabus-input {
+  width: 40vw !important;
+}
+
+.syllabus-instructions {
+  margin-top: 30px;
+}
+
 /* smartphone to low-res tablet/landscape mobile */
 @media (min-width: 320px) and (max-width: 767px) {
 
@@ -36,8 +58,4 @@
     padding-top: 5px !important;
     padding-bottom: 5px !important;
   }
-
-  /* #review-meta {
-    margin-top: 1vh !important
-  } */
 }

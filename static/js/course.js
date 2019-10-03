@@ -17,6 +17,16 @@ $('input:file', '.ui.action.input').on('change', function (e) {
 
   $('.rating').rating('disable')
 
+  // closing messages
+  $('.message .close')
+    .on('click', function() {
+      $(this)
+        .closest('.message')
+        .transition('fade')
+      ;
+    })
+  ;
+
   // syllabus upload modal
   $('#upload-syllabus').click(function() {
     $('#upload-modal').modal('show');
@@ -26,28 +36,42 @@ $('input:file', '.ui.action.input').on('change', function (e) {
 
     console.log(url)
 
-    function upload(event) {
-      event.preventDefault();
-      var data = new FormData($('#syllabus-form-ajax').get(0));
-      console.log(data)
+    function upload(e) {
+      e.preventDefault();
+      var file = $('#id_syllabus').prop('files')[0];
 
-      $.ajax({
-        url: url,
-        type: method,
-        data: data,
-        cache: false,
-        processData: false,
-        contentType: false,
-        success: function(data) {
-          location.reload();
-          alert('success');
-        }
-      });
-      return false
+      valid_type = false
+      valid_size = false
+
+      // checking to see if file was uploaded
+      if (file == undefined) {
+        $('.ui.container').prepend('<div class="ui negative message"><i class="close icon"></i><div class="header">Please upload a file.</div></div>');
+      }
+
+      // checking to see file is a pdf
+      if (file.type == "application/pdf") {
+        valid_type = true
+      } else {
+        valid_type = false
+        $('.ui.container').prepend('<div class="ui negative message"><i class="close icon"></i><div class="header">Please upload a syllabus in PDF form.</div></div>');
+      }
+
+      // checking to see file is <5 mb
+      if (file.size <= 5242880) {
+        valid_size = true
+      } else {
+        valid_size = false
+        $('.ui.container').prepend('<div class="ui negative message"><i class="close icon"></i><div class="header">Please upload a syllabus in PDF form that is under 5 MB.</div></div>');
+      }
+
+      if (valid_type == true && valid_size == true) {
+        $('form#syllabus-form').submit();
+      }
+
     }
 
     $(function() {
-      $('#syllabus-submit-ajax').click(upload);
+      $('#syllabus-submit-button').click(upload);
     });
   });
 
