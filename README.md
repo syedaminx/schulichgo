@@ -1,1 +1,1 @@
-# schulichgo
+# SchulichGO
